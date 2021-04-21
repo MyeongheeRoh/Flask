@@ -26,7 +26,6 @@
 
 {% block script %}
 <!-- 유효성 체크 -->
-
 document.getElementById("submit").addEventListener("click", checkAll);
 
 function checkAll(){
@@ -53,7 +52,7 @@ function checkAll(){
 
 }
 
-<!-- TODO : 정규식 추가? -->
+<!-- TODO : 정규식 추가 -->
 function checkPname(value){
 if(value != "") return true;
 alert("상품명을 입력하세요.");

@@ -1,45 +1,43 @@
 <!doctype html>
-  <head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-		<title> Title {% block title %}{% endblock %}</title>
-		{% block head %}{% endblock %}
-  </head>
-  <body width="100%" style="background-color:lightgray;">
-   {% if error %}<div class=error><strong>Error:</strong> {{ error }}</div>{% endif %}
-   <div id="header" style="background-color:lightpink;">header</div>
-   <!-- 플래시 메시지 -->
-   {% with flashes = get_flashed_messages() %} 
-     {% if flashes %}
-       <ul class=flashes>
-         {{ flashes }}
-       </ul>
-     {% endif %}
-   {% endwith %} 
 
-   <!-- content-->
-    <div id="content" class="span12" style="background-color:white;">
-	<ul class=data>
-	        {% for product in data %}
-	                <li>{{product}}</li>
-	        {% endfor %}
-	</ul>
-	{% block content %}{% endblock %}
-    </div>
-	<!-- end of content-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>{% block title %} Title {% endblock %}</title>
+  {% block head %}{% endblock %}
+</head>
 
-	<!-- footer begin -->
-    <div id="footer" class="span12" style="background-color:plum;">
-        footer
-    </div>
-    <!-- footer end -->
-    
-    <!-- script begin -->
-    <script type="text/javascript">
-	{% block script %}{% endblock %} 
-    </script>
-    <!-- script end -->
+<body width="100%" style="background-color:lightgray;">
+  {% if error %}<div class=error><strong>Error:</strong> {{ error }}</div>{% endif %}
+  <div id="header" style="background-color:lightpink;">
+  {% block header %} Header {% endblock %}
+  </div>
+  <!-- 플래시 메시지 -->
+  {% with flashes = get_flashed_messages() %}
+  {% if flashes %}
+  <ul class=flashes>
+    {{ flashes }}
+  </ul>
+  {% endif %}
+  {% endwith %}
 
-  </body>
+  <!-- content-->
+  <div id="content" class="span12" style="background-color:white;">
+    {% block content %}{% endblock %}
+  </div>
+  <!-- end of content-->
+
+  <!-- footer begin -->
+  <div id="footer" class="span12" style="background-color:plum;">
+    footer
+  </div>
+  <!-- footer end -->
+
+  <!-- script begin -->
+  <script type="text/javascript">
+    {% block script %} {% endblock %}
+  </script>
+  <!-- script end -->
+
+</body>
+
 </html>
-
-

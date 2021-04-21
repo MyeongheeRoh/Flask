@@ -3,6 +3,8 @@ from flask import Flask, g, render_template, flash, request, session
 
 app = Flask(__name__)
 
+#TODO : 연결실패시 에러처리
+#TODO : DB 정보 따로 빼거나 받을수 있도록
 @app.before_request
 def get_db():
     '''Connects to the specific database.'''
@@ -19,8 +21,9 @@ def close_connection(exception):
         print('연결종료')
         db.close()
 
+#TODO : 쿼리문 수행 실패시 에러처리?
 def read_product_all():
-    ret = list()
+    ret = tuple()
     cur = g.db.cursor()
     cur.execute('select * from product')
     ret = cur.fetchall()
@@ -29,7 +32,7 @@ def read_product_all():
 @app.route('/')
 def shop_main():
     products = read_product_all()
-    return render_template("layout.html",data=products)
+    return render_template("product.html",data=products)
 
 @app.route('/product/register', methods=['GET', 'POST'])
 def register_product():
@@ -51,16 +54,19 @@ def register_product():
         elif not request.form['category']:
             error = '카테고리를 입력하세요.' 
         else:
-            #TODO : DB 연결 실패 or 쿼리 수행 실패시 에러처리.
-            cur = g.db.cursor()
-            cur.execute('''INSERT INTO PRODUCT(ID, NAME, COST_PRICE, SELLING_PRICE, PRODUCT_INFORMATION, PRODUCT_CATEGORY) VALUES (NEXTVAL('PRODUCT_SEQ'), %s, %s, %s, %s, %s)''', [request.form['pname'], request.form['cost_price'], request.form['selling_price'], request.form['product_info'], request.form['category']])
-            g.db.commit()
-            flash('상품 등록이 완료되었습니다.')
 
+            try:
+                cur = g.db.cursor()
+                cur.execute('''INSERT INTO PRODUCT(ID, NAME, COST_PRICE, SELLING_PRICE, PRODUCT_INFORMATION, PRODUCT_CATEGORY) VALUES (NEXTVAL('PRODUCT_SEQ'), %s, %s, %s, %s, %s)''', [request.form['pname'], request.form['cost_price'], request.form['selling_price'], request.form['product_info'], request.form['product_category']])
+                g.db.commit()
+                flash('상품 등록이 완료되었습니다.')
+            except Exception as e:
+                g.db.rollback()
+                flash('상품 등록이 실패했습니다.')
+    
     return render_template("registerproduct.html", error=error)
 
 if __name__ == '__main__':
     app.secret_key = 'super secret key'
     app.config['SESSION_TYPE'] = 'filesystem'
     app.run()
-
