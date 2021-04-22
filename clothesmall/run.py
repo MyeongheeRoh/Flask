@@ -1,5 +1,5 @@
 from create import create_app
-from flask import render_template, request, session, g, redirect
+from flask import render_template, request, session, g, redirect, flash
 from database import DBManager
 from model.product import Product
 
@@ -33,29 +33,60 @@ def read_product_all():
 def register_product_form():
     '''상품 등록을 위한 폼을 제공하는 함수'''
     #TODO : 유효성체크 함수 만들기
-    return render_template('registerproduct.html')
+    return render_template('editproduct.html')
 
 @app.route('/product/register', methods=['POST'])
 def register_product():
     '''사용자 등록을 위한 함수'''
-   
-    name = request.form['pname']
-    cost_price = request.form['cost_price']
-    selling_price = request.form['selling_price']
-    admin_id = 1
-    product_category = request.form['category']
 
-    try:
-        product = Product(name, cost_price, selling_price, admin_id, product_category)
-        g.db.add(product)
-        g.db.commit()
+    if not request.form['pname']:
+        error = '상품명을 입력하세요.'
+    elif not request.form['cost_price']:
+        error = '원가를 입력하세요.'
+    elif not request.form['selling_price']:
+        error = '판매가를 입력하세요.'
+    elif not request.form['category']:
+        error = '카테고리를 입력하세요.'
+    else:
+
+        try:
+            name = request.form['pname']
+            cost_price = request.form['cost_price']
+            selling_price = request.form['selling_price']
+            admin_id = 1
+            product_category = request.form['category']
             
-    except Exception as e:
-        error = "DB error occurs : " + str(e)
-        print(error)
-        g.db.rollback()
-        raise e
+            product = Product(name, cost_price, selling_price, admin_id, product_category)
+            g.db.add(product)
+            g.db.commit()
+            flash('상품 등록이 완료되었습니다.')
         
+        except Exception as e:
+            error = "DB error occurs : " + str(e)
+            print(error)
+            g.db.rollback()
+            flash('상품 등록이 실패했습니다.')
+            raise e
+
+    return redirect('/')
+    
+
+@app.route('/product/edit')
+def modify_product_form():
+    '''상품목록 수정하기 폼을 제공하는 함수'''
+    return render_template('editproduct.html')
+
+@app.route('/product/edit', methods=['POST'])
+def modify_product():
+    '''상품목록 수정하기'''
+    try:
+        products = g.db.query(Product).filter(Product.id == 1).update({'cost_price':6000});
+        g.db.commit()
+
+    except Exception as e:
+        print('error message',e)
+        raise e
+
     else:
         return redirect('/')
 
