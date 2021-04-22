@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Edit Product{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+	<form>
+    상품번호 : {{data.id}}<br>
+    상품명 : {{data.name}}<br>
+    가격 : {{data.cost_price}}<br>
+    카테고리 : {{data.product_category}}<br>
+    <br><br>
+    <input type="button" id="modify" value="수정">
+    <input type="button" id="delete" value="삭제"><br>
+  </form>
+{% endblock %}

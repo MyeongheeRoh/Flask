@@ -70,17 +70,27 @@ def register_product():
 
     return redirect('/')
     
+def __get_product_one(id):
+    try:
+        product = g.db.query(Product).filter_by(id=id).one()
+        return product 
+     
+    except Exception as e:
+        print(str(e))
+        raise e
 
-@app.route('/product/edit')
-def modify_product_form():
-    '''상품목록 수정하기 폼을 제공하는 함수'''
-    return render_template('editproduct.html')
+@app.route('/product/detail/<id>')
+def read_product_detail(id):
+    '''상품 상세 페이지'''
+    print('*************', id)
+    product = __get_product_one(id)
+    return render_template('productdetail.html', data = product)
 
 @app.route('/product/edit', methods=['POST'])
 def modify_product():
     '''상품목록 수정하기'''
     try:
-        products = g.db.query(Product).filter(Product.id == 1).update({'cost_price':6000});
+        products = g.db.query(Product).filter(id == 1).update({'cost_price':6000})
         g.db.commit()
 
     except Exception as e:

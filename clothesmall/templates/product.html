@@ -5,9 +5,8 @@
 {% endblock %}
 
 {% block content %}
-	<ul class=data>
-                {% for product in data %}
-                        <li>{{ product }}</li>
-                {% endfor %}
-        </ul>
+        {% for product in data %}
+                {{product.id}} <a href="{{url_for('read_product_detail', id=product.id)}}"> {{ product.name }} </a> {{product.selling_price}}
+                <br><br>
+        {% endfor %}
 {% endblock %}
