@@ -7,24 +7,58 @@
 {% block content %}
 <form name="registForm" action="/product/register" method="post">
   <label for="product_name">상품이름: </label><br>
-  <input type="text" id="pname" name="pname"><br>
+    {% if data %}
+      <input type="text" id="pname" name="pname" value="{{data.name}}"><br>
+    {% else %}
+      <input type="text" id="pname" name="pname"><br>
+    {% endif %}
   <label for="cost_price">원가: </label><br>
-  <input type="number" id="cost_price" name="cost_price"><br>
+    {% if data %}
+      <input type="number" id="cost_price" name="cost_price" value="{{data.cost_price}}"><br>
+    {% else %}
+      <input type="number" id="cost_price" name="cost_price"><br>
+    {% endif %}
   <label for="selling_price">판매가: </label><br>
-  <input type="number" id="selling_price" name="selling_price"><br>
-  <label for="category">카테고리: </label><br>
-  <select name="category" id="category">
-	<option value="1">아우터</option>
-	<option value="2">상의</option>
-	<option value="3">하의</option>
-  </select><br><br><br>
-  <input type="button" id="regist" value="등록" onclick="checkAll()"><br>
+    {% if data %}
+      <input type="number" id="selling_price" name="selling_price" value="{{data.selling_price}}"><br>
+    {% else %}
+      <input type="number" id="selling_price" name="selling_price"><br>
+    {% endif %}
+
+    {% if data %}
+      <label for="category">카테고리: </label><br>
+      <select name="category" id="category">
+        <option value="1" {% if data.product_category == 1 %} selected {% endif %}>아우터</option>
+        <option value="2" {% if data.product_category == 2 %} selected {% endif %}>상의</option>
+        <option value="3" {% if data.product_category == 3 %} selected {% endif %}>하의</option>
+      </select><br><br><br>
+      <input type="button" id="save" value="저장" onclick="checkAll()"><br>
+    {% else %}
+      <label for="category">카테고리: </label><br>
+      <select name="category" id="category" onload="selectedCategory({{data.product_category}})">
+        <option value="1">아우터</option>
+        <option value="2">상의</option>
+        <option value="3">하의</option>
+      </select><br><br><br>
+      <input type="button" id="regist" value="등록" onclick="checkAll()"><br>
+    {% endif %}
 </form>
 {% endblock %}
 
 {% block script %}
 <!-- 유효성 체크 -->
 console.log('1');
+
+function selectedCategory(category_id){
+  console.log('실행되니?');
+  console.log(category_id);
+  let sel = document.getElementById("category");
+  for(let i=0; i<sel.length; i++){
+    if(sel[i].value == category_id){
+      sel[i].selected = true;
+    }
+  }
+}
 
 function checkAll(){
 	

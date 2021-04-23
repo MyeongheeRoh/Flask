@@ -98,6 +98,14 @@ def read_product_detail(id):
     product = __get_product_one(id)
     return render_template('productdetail.html', data = product)
 
+@app.route('/product/editform', methods=['POST'])
+def modify_product_form():
+    '''상품 수정을 위한 폼을 제공하는 함수'''
+    #TODO : 유효성체크 함수 만들기
+    id = request.form.get('product_id')
+    product = __get_product_one(id)
+    return render_template('editproduct.html', data = product)
+
 @app.route('/product/edit', methods=['POST'])
 def modify_product():
     '''상품목록 수정하기'''
