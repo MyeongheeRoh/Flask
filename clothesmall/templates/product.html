@@ -5,8 +5,20 @@
 {% endblock %}
 
 {% block content %}
-        {% for product in data %}
-                {{product.id}} <a href="{{url_for('read_product_detail', id=product.id)}}"> {{ product.name }} </a> {{product.selling_price}}
-                <br><br>
-        {% endfor %}
+        <table style="text-align:center">
+                <tr>
+                        <th>상품번호</th>
+                        <th>상품명</th>
+                        <th>가격</th>
+                        <th>삭제여부(삭제:1)</th>
+                </tr>
+                {% for product in data %}
+                        <tr>
+                                <td>{{ product.id }}</td>
+                                <td><a href="{{url_for('read_product_detail', id=product.id)}}"> {{ product.name }} </a></td>
+                                <td>{{ product.selling_price }}</td>
+                                <td>{{ product.is_deleted }}</td>
+                        </tr>
+                {% endfor %}
+        </table>
 {% endblock %}

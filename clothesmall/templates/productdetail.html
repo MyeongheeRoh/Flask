@@ -12,6 +12,9 @@
     카테고리 : {{data.product_category}}<br>
     <br><br>
     <input type="button" id="modify" value="수정">
-    <input type="button" id="delete" value="삭제"><br>
   </form>
-{% endblock %}
+  <form name="delForm" action="/product/delete" method="post">
+    <input type="hidden" id="product_id" value="{{data.id}}" name="product_id">
+    <button type="submit" id="delete">삭제</button><br>
+  </form>
+  {% endblock %}

@@ -17,7 +17,7 @@ def get_db():
 def __get_product_all():
     '''상품목록 가져오기'''
     try:
-        products = g.db.query(Product)
+        products = g.db.query(Product).order_by(Product.is_deleted)
         return products 
      
     except Exception as e:
@@ -29,6 +29,21 @@ def read_product_all():
     products = __get_product_all()
     return render_template('product.html', data = products)
 
+def create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted):   
+    try:
+        product = Product(name, cost_price, selling_price, admin_id, product_category, is_deleted)
+        g.db.add(product)
+        g.db.commit()
+        flash('상품 등록이 완료되었습니다.')
+        
+    except Exception as e:
+        error = "DB error occurs : " + str(e)
+        print(error)
+        g.db.rollback()
+        flash('상품 등록이 실패했습니다.')
+        raise e
+
+
 @app.route('/product/register')
 def register_product_form():
     '''상품 등록을 위한 폼을 제공하는 함수'''
@@ -39,34 +54,31 @@ def register_product_form():
 def register_product():
     '''사용자 등록을 위한 함수'''
 
-    if not request.form['pname']:
-        error = '상품명을 입력하세요.'
-    elif not request.form['cost_price']:
-        error = '원가를 입력하세요.'
-    elif not request.form['selling_price']:
-        error = '판매가를 입력하세요.'
-    elif not request.form['category']:
-        error = '카테고리를 입력하세요.'
-    else:
+    try:
+        name = request.form['pname']
+        cost_price = request.form['cost_price']
+        selling_price = request.form['selling_price']
+        admin_id = 1
+        product_category = request.form['category']
+        is_deleted = 0
 
-        try:
-            name = request.form['pname']
-            cost_price = request.form['cost_price']
-            selling_price = request.form['selling_price']
-            admin_id = 1
-            product_category = request.form['category']
-            
-            product = Product(name, cost_price, selling_price, admin_id, product_category)
-            g.db.add(product)
-            g.db.commit()
-            flash('상품 등록이 완료되었습니다.')
+        if not name:
+            error = '상품명을 입력하세요.'
+        elif not cost_price:
+            error = '원가를 입력하세요.'
+        elif not selling_price:
+            error = '판매가를 입력하세요.'
+        elif not product_category:
+            error = '카테고리를 입력하세요.'
+        else:
+            create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted)
         
-        except Exception as e:
-            error = "DB error occurs : " + str(e)
-            print(error)
-            g.db.rollback()
-            flash('상품 등록이 실패했습니다.')
-            raise e
+    except Exception as e:
+        error = "DB error occurs : " + str(e)
+        print(error)
+        g.db.rollback()
+        flash('상품 등록이 실패했습니다.')
+        raise e
 
     return redirect('/')
     
@@ -82,7 +94,7 @@ def __get_product_one(id):
 @app.route('/product/detail/<id>')
 def read_product_detail(id):
     '''상품 상세 페이지'''
-    print('*************', id)
+    print('************* 상품 아이디', id)
     product = __get_product_one(id)
     return render_template('productdetail.html', data = product)
 
@@ -90,7 +102,7 @@ def read_product_detail(id):
 def modify_product():
     '''상품목록 수정하기'''
     try:
-        products = g.db.query(Product).filter(id == 1).update({'cost_price':6000})
+        products = g.db.query(Product).filter(id=1).update({'cost_price':6000})
         g.db.commit()
 
     except Exception as e:
@@ -100,6 +112,27 @@ def modify_product():
     else:
         return redirect('/')
 
+def __delete_product(id):
+    try:
+        product = g.db.query(Product).filter_by(id=id).first()
+        print('delete::::::::::::', product)
+        product.is_deleted = 1
+        g.db.commit()
+        print('상품 삭제가 성공했습니다.')
+     
+    except Exception as e:
+        error = "DB error occurs : " + str(e)
+        print(error)
+        g.db.rollback()
+        print('상품 삭제가 실패했습니다.')
+        raise e
+
+@app.route('/product/delete', methods=['POST'])
+def remove_product():
+    id = request.form.get('product_id')
+    print('remove_product:::::::::::', id)
+    __delete_product(id)
+    return redirect('/')
 
 if __name__ == '__main__':
     app.secret_key = 'super secret key'
