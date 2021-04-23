@@ -17,7 +17,7 @@ def get_db():
 def __get_product_all():
     '''상품목록 가져오기'''
     try:
-        products = g.db.query(Product).order_by(Product.is_deleted)
+        products = g.db.query(Product).order_by(Product.is_deleted, Product.id)
         return products 
      
     except Exception as e:
@@ -29,7 +29,7 @@ def read_product_all():
     products = __get_product_all()
     return render_template('product.html', data = products)
 
-def create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted):   
+def __create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted):   
     try:
         product = Product(name, cost_price, selling_price, admin_id, product_category, is_deleted)
         g.db.add(product)
@@ -63,15 +63,15 @@ def register_product():
         is_deleted = 0
 
         if not name:
-            error = '상품명을 입력하세요.'
+            error = '상품명이 없습니다.'
         elif not cost_price:
-            error = '원가를 입력하세요.'
+            error = '원가가 없습니다.'
         elif not selling_price:
-            error = '판매가를 입력하세요.'
+            error = '판매가가 없습니다.'
         elif not product_category:
-            error = '카테고리를 입력하세요.'
+            error = '카테고리가 없습니다.'
         else:
-            create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted)
+            __create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted)
         
     except Exception as e:
         error = "DB error occurs : " + str(e)
@@ -106,19 +106,50 @@ def modify_product_form():
     product = __get_product_one(id)
     return render_template('editproduct.html', data = product)
 
+def __modify_product_(id, name, cost_price, selling_price, product_category):
+    try:
+        g.db.query(Product).filter_by(id=id).update({'name':name, 'cost_price':cost_price, 'selling_price':selling_price, 'product_category':product_category})
+        g.db.commit()
+        print('modify::::::::::::')
+        g.db.commit()
+        print('상품 수정이 성공했습니다.')
+     
+    except Exception as e:
+        error = "DB error occurs : " + str(e)
+        print(error)
+        g.db.rollback()
+        print('상품 삭제가 실패했습니다.')
+        raise e
+
+
 @app.route('/product/edit', methods=['POST'])
 def modify_product():
     '''상품목록 수정하기'''
     try:
-        products = g.db.query(Product).filter(id=1).update({'cost_price':6000})
-        g.db.commit()
+        id = request.form['product_id']
+        name = request.form['pname']
+        cost_price = request.form['cost_price']
+        selling_price = request.form['selling_price']
+        product_category = request.form['category']
+
+        if not id:
+            error = '상품 번호가 없습니다.'
+        elif not name:
+            error = '상품명이 없습니다.'
+        elif not cost_price:
+            error = '원가가 없습니다.'
+        elif not selling_price:
+            error = '판매가가 없습니다.'
+        elif not product_category:
+            error = '카테고리가 없습니다.'
+        else:
+            __modify_product_(id, name, cost_price, selling_price, product_category)
 
     except Exception as e:
         print('error message',e)
         raise e
 
-    else:
-        return redirect('/')
+    return redirect('/')
 
 def __delete_product(id):
     try:

@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block content %}
-<form name="registForm" action="/product/register" method="post">
+<form id="productform" name="productform" action="/product/register" method="post">
+  <input type="hidden" id="product_id" value="{{data.id}}" name="product_id">
   <label for="product_name">상품이름: </label><br>
     {% if data %}
       <input type="text" id="pname" name="pname" value="{{data.name}}"><br>
@@ -49,16 +50,19 @@
 <!-- 유효성 체크 -->
 console.log('1');
 
-function selectedCategory(category_id){
-  console.log('실행되니?');
-  console.log(category_id);
-  let sel = document.getElementById("category");
-  for(let i=0; i<sel.length; i++){
-    if(sel[i].value == category_id){
-      sel[i].selected = true;
-    }
-  }
-}
+<!-- 저장 -->
+document.getElementById("save").addEventListener("click",function(){
+  let form = document.getElementById("productform");
+  form.setAttribute("action","/product/edit");
+  form.submit();
+});
+
+<!-- 등록 -->
+document.getElementById("regist").addEventListener("click",function(){
+  let form = document.getElementById("productform");
+  form.setAttribute("action","/product/register");
+  form.submit();
+});
 
 function checkAll(){
 	
@@ -85,9 +89,6 @@ function checkAll(){
 	else if(category==""){
     alert('카테고리를 입력하세요');
   }
-	else{
-		registForm.submit();
-	}
+}
 
-} 
 {% endblock %}
