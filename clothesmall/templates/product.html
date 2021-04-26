@@ -13,7 +13,9 @@
                 <div class="panel panel-default">
                 <div class="panel-heading"><a href="{{url_for('product.read_product_detail', id=product.id)}}"> {{ product.name }}</a></div>
                 <div class="panel-body">
-                        <img src="">
+                {% if True %}
+                        <img style="width:250px; height:250px;" src="{{ url_for('static', filename='images/'+product.img_address) }}">
+                {% endif %}
                 </div>
                 <div class="panel-footer">판매가 : {{ product.selling_price }}</div>
                 </div>

@@ -59,10 +59,12 @@
   if(save != null){
     save.addEventListener("click", saveBtn);
   }
+  
   let regist = document.getElementById("regist");
   if(regist != null){
     regist.addEventListener("click", registBtn);
   }
+
   function saveBtn(save){
     let form = document.getElementById("productform");
     form.setAttribute("action","/product/edit");
