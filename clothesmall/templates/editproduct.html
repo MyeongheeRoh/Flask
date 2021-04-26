@@ -10,9 +10,9 @@
 {% block content %}
 
 <form id="productform" name="productform" action="/product/register" method="post">
+  <label for="product_name">상품이름: </label><br>
+  {% if data %}
     <input type="hidden" id="product_id" value="{{data.id}}" name="product_id">
-    <label for="product_name">상품이름: </label><br>
-    {% if data %}
     <input class="form-control" type="text" id="pname" name="pname" value="{{data.name}}"><br>
     {% else %}
     <input class="form-control" type="text" id="pname" name="pname"><br>
@@ -34,45 +34,46 @@
 
     {% if data %}
     <label for="category">카테고리: </label><br>
-    <select class="form-control" name="category" id="category">
+    <select class="form-control" name="category" id="category" onload="selectedCategory({{data.product_category}})">
       <option value="1" {% if data.product_category == 1 %} selected {% endif %}>아우터</option>
       <option value="2" {% if data.product_category == 2 %} selected {% endif %}>상의</option>
       <option value="3" {% if data.product_category == 3 %} selected {% endif %}>하의</option>
-    </select><br><br><br>
+    </select><br>
     <input class="btn btn-default" type="button" id="save" value="저장" onclick="checkAll()"><br>
     {% else %}
     <label for="category">카테고리: </label><br>
-    <div class="form-group">
-    <select class="form-control" name="category" id="category" onload="selectedCategory({{data.product_category}})">
+    <select class="form-control" name="category" id="category">
       <option value="1">아우터</option>
       <option value="2">상의</option>
       <option value="3">하의</option>
-    </select>
-    </div>
-    <br><br><br>
+    </select><br>
     <input class="btn btn-default" type="button" id="regist" value="등록" onclick="checkAll()"><br>
     {% endif %}
 </form>
 {% endblock %}
 
-{% block scripts %}
-  <script type="text/javascript">
-  <!-- 유효성 체크 -->
+{% block script %}
   console.log('1');
 
-  <!-- 저장 -->
-  document.getElementById("save").addEventListener("click",function(){
+  let save = document.getElementById("save");
+  if(save != null){
+    save.addEventListener("click", saveBtn);
+  }
+  let regist = document.getElementById("regist");
+  if(regist != null){
+    regist.addEventListener("click", registBtn);
+  }
+  function saveBtn(save){
     let form = document.getElementById("productform");
     form.setAttribute("action","/product/edit");
     form.submit();
-  });
+  }
 
-  <!-- 등록 -->
-  document.getElementById("regist").addEventListener("click",function(){
+  function registBtn(regist){
     let form = document.getElementById("productform");
     form.setAttribute("action","/product/register");
-  form.submit();
-  });
+    form.submit();
+  }
 
   function checkAll(){
 
@@ -99,6 +100,5 @@
       else if(category==""){
         alert('카테고리를 입력하세요');
       }
-    }
-</script>
+  }
 {% endblock %}

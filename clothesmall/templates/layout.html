@@ -41,13 +41,14 @@
       <a class="navbar-brand" href="/">ShopName</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Product<span class="caret"></span></a>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">상품목록<span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="/product">아우터</a></li>
           <li><a href="/product">상의</a></li>
           <li><a href="/product">하의</a></li>
         </ul>
       </li>
+      <li><a href="/product/register">상품등록</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li><a href="#"><span class="glyphicon glyphicon-user"></span> Your Account </a></li>
@@ -71,6 +72,11 @@
     <button type="button" class="btn btn-danger">Sign Up</button>
   </form>
 </footer>
+
+<script type="text/javascript">
+{% block script %}
+{% endblock %}
+</script>
 
 </body>
 </html>
