@@ -1,40 +1,76 @@
-<!doctype html>
-  <head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-		<title> Title {% block title %}{% endblock %}</title>
-    {% block head %}{% endblock %}
-  </head>
-  <body width="100%" style="background-color:lightgray;">
-   {% if error %}<div class=error><strong>Error:</strong> {{ error }}</div>{% endif %}
-   <div id="header" style="background-color:lightpink;">header</div>
-   <!-- 플래시 메시지 -->
-   {% with flashes = get_flashed_messages() %} 
-     {% if flashes %}
-       <ul class=flashes>
-         {{ flashes }}
-       </ul>
-     {% endif %}
-   {% endwith %} 
-
-   <!-- content-->
-    <div id="content" class="span12" style="background-color:white;">
-	{% block content %}{% endblock %}
-    </div>
-	<!-- end of content-->
-
-	<!-- footer begin -->
-    <div id="footer" class="span12" style="background-color:plum;">
-        footer
-    </div>
-    <!-- footer end -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{% block title %} Bootstrap Example {% endblock %}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default rounded borders and increase the bottom margin */ 
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
     
-    <!-- script begin -->
-    <script type="text/javascript">
-	{% block script %}{% endblock %} 
-    </script>
-    <!-- script end -->
+    /* Remove the jumbotron's default bottom margin */ 
+     .jumbotron {
+      margin-bottom: 0;
+    }
+   
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+  </style>
+</head>
+<body>
 
-  </body>
+<div class="jumbotron">
+  <div class="container text-center">
+    <h1>Online Store</h1>      
+    <p>Mission, Vission & Values</p>
+  </div>
+</div>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">ShopName</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Product<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/product">아우터</a></li>
+          <li><a href="/product">상의</a></li>
+          <li><a href="/product">하의</a></li>
+        </ul>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><span class="glyphicon glyphicon-user"></span> Your Account </a></li>
+      <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">    
+  <div class="row">
+    {% block content %}
+    <h1>메인화면</h1>
+    {% endblock %}
+  </div>
+</div><br>
+
+<footer class="container-fluid text-center">
+  <p>Online Store Copyright</p>  
+  <form class="form-inline">Get deals:
+    <input type="email" class="form-control" size="50" placeholder="Email Address">
+    <button type="button" class="btn btn-danger">Sign Up</button>
+  </form>
+</footer>
+
+</body>
 </html>
-
-

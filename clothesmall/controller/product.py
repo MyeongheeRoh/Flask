@@ -18,19 +18,19 @@ def get_db():
 def __get_product_all():
     '''상품목록 가져오기'''
     try:
-        products = g.db.query(Product).order_by(Product.is_deleted, Product.id)
+        products = g.db.query(Product).filter(Product.is_deleted==0).order_by(Product.id)
         return products 
      
     except Exception as e:
         print('error message',e)
         raise e
 
-@bp.route('/boot')
+@bp.route('/')
 def hello():
     print("hello print")
-    return render_template('layoutb.html')
+    return render_template('layout.html')
 
-@bp.route('/')
+@bp.route('/product')
 def read_product_all():
     products = __get_product_all()
     return render_template('product.html', data = products)

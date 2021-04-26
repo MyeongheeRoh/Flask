@@ -3,22 +3,20 @@
 {% block head %}
   {{ super() }}
 {% endblock %}
+{% block nav %}
+{{ super() }}
+{% endblock %}
 
 {% block content %}
-        <table style="text-align:center">
-                <tr>
-                        <th>상품번호</th>
-                        <th>상품명</th>
-                        <th>가격</th>
-                        <th>삭제여부(삭제:1)</th>
-                </tr>
-                {% for product in data %}
-                        <tr>
-                                <td>{{ product.id }}</td>
-                                <td><a href="{{url_for('product.read_product_detail', id=product.id)}}"> {{ product.name }} </a></td>
-                                <td>{{ product.selling_price }}</td>
-                                <td>{{ product.is_deleted }}</td>
-                        </tr>
-                {% endfor %}
-        </table>
+        {% for product in data %}
+        <div class="col-sm-4">
+                <div class="panel panel-default">
+                <div class="panel-heading"><a href="{{url_for('product.read_product_detail', id=product.id)}}"> {{ product.name }}</a></div>
+                <div class="panel-body">
+                        <img src="">
+                </div>
+                <div class="panel-footer">판매가 : {{ product.selling_price }}</div>
+                </div>
+        </div> 
+        {% endfor %}
 {% endblock %}

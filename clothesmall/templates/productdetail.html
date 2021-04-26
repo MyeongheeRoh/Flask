@@ -1,21 +1,33 @@
 {% extends "layout.html" %}
-{% block title %}Edit Product{% endblock %}
+{% block title %}Product{% endblock %}
 {% block head %}
   {{ super() }}
 {% endblock %}
+{% block nav %}
+{{ super() }}
+{% endblock %}
 
 {% block content %}
-	<form name="modForm" action="/product/editform" method="post">
-    상품번호 : {{data.id}}<br>
-    상품명 : {{data.name}}<br>
-    가격 : {{data.selling_price}}<br>
-    카테고리 : {{data.product_category}}<br>
-    <br><br>
-    <input type="hidden" id="product_id" value="{{data.id}}" name="product_id">
-    <button type="submit" id="modify">수정</button>
-  </form>
-  <form name="delForm" action="/product/delete" method="post">
-    <input type="hidden" id="product_id" value="{{data.id}}" name="product_id">
-    <button type="submit" id="delete">삭제</button><br>
-  </form>
-  {% endblock %}
+<form id="modForm" name="modForm" action="/product/editform" method="post">
+  <table class="table">
+    <tr>
+      <th>상품번호</th>
+      <th>상품명</th>
+      <th>가격</th>
+      <th>카테고리</th>
+    </tr>
+    <tr>
+      <td>{{ data.id }}</td>
+      <td>{{ data.name }}</td>
+      <td>{{ data.selling_price }}</td>
+      <td>{{ data.product_category }}</td>
+    </tr>
+  </table>
+  <input type="hidden" id="product_id" value="{{data.id}}" name="product_id">
+  <button class="btn btn-default" type="submit" id="modify">수정</button>
+</form>
+<form name="delForm" action="/product/delete" method="post">
+  <input type="hidden" id="product_id" value="{{data.id}}" name="product_id">
+  <button class="btn btn-default" type="submit" id="delete">삭제</button><br>
+</form>
+{% endblock %}

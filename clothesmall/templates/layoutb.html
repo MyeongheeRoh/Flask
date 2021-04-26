@@ -1,7 +1,6 @@
-# FlaskProgram/templates/program.html
 {% extends "bootstrap/base.html" %}
 
-{% block title %} Flasky {% endblock %}
+{% block title %} layout {% endblock %}
 
 {% block navbar %}
 <div class="navbar navbar-inverse" role="nvigation">
@@ -13,16 +12,27 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">Flasky</a>
+      <a class="navbar-brand" href="/">상품</a>
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-vab">
-        <li><a href="/">Home</a></li>
       </ul>
     </div>
   </div>
 </div>
 {% endblock %}
+
+{% if error %}<div class=error><strong>Error:</strong> {{ error }}</div>{% endif %}
+    <div id="header" style="background-color:lightpink;">header</div>
+    <!-- 플래시 메시지 -->
+{% with flashes = get_flashed_messages() %} 
+      {% if flashes %}
+        <ul class=flashes>
+          {{ flashes }}
+        </ul>
+      {% endif %}
+{% endwith %} 
+
 {% block content %}
 <div class="container">
   <div class="page-header">
@@ -30,3 +40,8 @@
   </div>
 </div>
 {% endblock %}
+<!-- script begin -->
+{% block scripts %}
+
+{% endblock %} 
+<!-- script end -->
