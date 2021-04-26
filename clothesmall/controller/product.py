@@ -25,6 +25,11 @@ def __get_product_all():
         print('error message',e)
         raise e
 
+@bp.route('/boot')
+def hello():
+    print("hello print")
+    return render_template('layoutb.html')
+
 @bp.route('/')
 def read_product_all():
     products = __get_product_all()
