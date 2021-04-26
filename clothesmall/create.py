@@ -9,4 +9,7 @@ def create_app(mode='dev'):
         app.config['DEBUG'] = True
     print('???')
 
+    from controller import product
+    app.register_blueprint(product.bp)
+
     return app
