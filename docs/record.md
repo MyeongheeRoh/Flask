@@ -1,7 +1,7 @@
 ## 환경 설정 및 DB
 
 - [ ]  DB 테이블 및 컬럼 생성
-    - ~~product~~, ~~admin~~, category, user
+    - ~~product~~, ~~user~~, category
 - [x]  ~~DB Connection~~
 - [x]  ~~DB : sqlalchemy ORM 이용~~
 - [x]  ~~Blueprint 적용~~
