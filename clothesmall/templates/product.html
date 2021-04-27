@@ -2,23 +2,42 @@
 {% block title %}Product{% endblock %}
 {% block head %}
   {{ super() }}
+  {% block st %}
+  .table{
+        text-align: center;
+  }
+  {% endblock %}
 {% endblock %}
 {% block nav %}
 {{ super() }}
 {% endblock %}
 
 {% block content %}
-        {% for product in data %}
-        <div class="col-sm-4">
-                <div class="panel panel-default">
-                <div class="panel-heading"><a href="{{url_for('product.read_product_detail', id=product.id)}}"> {{ product.name }}</a></div>
-                <div class="panel-body">
-                {% if True %}
-                        <img style="width:250px; height:250px;" src="{{ url_for('static', filename='images/'+product.img_address) }}">
-                {% endif %}
-                </div>
-                <div class="panel-footer">판매가 : {{ product.selling_price }}</div>
-                </div>
-        </div> 
+{% for product in data %}
+        <div class="col-sm-3">
+        <table class="table">
+                <tbody>
+                        <tr>
+                        <td>
+                                {% if True %}
+                                <a href="{{url_for('product.read_product_detail', id=product.id)}}">
+                                        <img class="col-xs-12" src="{{ url_for('static', filename='images/'+product.img_address) }}">
+                                </a>
+                                {% endif %}
+                        </td>
+                        </tr>      
+                        <tr>
+                        <td>
+                                <a href="{{url_for('product.read_product_detail', id=product.id)}}"> {{ product.name }}</a>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td>
+                                판매가 : {{ product.selling_price }}
+                        </td>
+                        </tr>
+                </tbody>
+        </table>
+        </div>
         {% endfor %}
 {% endblock %}

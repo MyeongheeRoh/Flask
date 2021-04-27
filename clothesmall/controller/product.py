@@ -30,7 +30,7 @@ def hello():
     print("hello print")
     return render_template('layout.html')
 
-@bp.route('/product')
+@bp.route('/product/list')
 def read_product_all():
     products = __get_product_all()
     return render_template('product.html', data = products)
@@ -86,7 +86,7 @@ def register_product():
         flash('상품 등록이 실패했습니다.')
         raise e
 
-    return redirect('/')
+    return redirect('/product/list')
     
 def __get_product_one(id):
     try:
@@ -153,7 +153,7 @@ def modify_product():
         print('error message',e)
         raise e
 
-    return redirect('/')
+    return redirect('/product/list')
 
 def __delete_product(id):
     try:
@@ -175,4 +175,4 @@ def remove_product():
     id = request.form.get('product_id')
     print('remove_product:::::::::::', id)
     __delete_product(id)
-    return redirect('/')
+    return redirect('/product/list')
