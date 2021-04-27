@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}User{% endblock %}
 {% block head %}
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
   {{ super() }}
 {% endblock %}
 
@@ -13,15 +14,15 @@
 
 {% block content %}
 
-<!-- 회원가입 모달창 -->
-<form class="form-horizontal" action='#' method="POST">
-		<!-- Modal body -->
 		  <fieldset>
 				<div class="control-group">
 					<!-- E-mail -->
 					<label class="control-label" for="email">E-mail</label>
 					<div class="controls">
+						<div class="input-append">
 						<input class="form-control" type="text" id="email" name="email" placeholder="형식에 맞게 이메일을 입력해주세요"><br>
+						<button id="email_check" class="btn btn-primary">확인</button>
+						</div>
 					</div>
 				</div>
 	
@@ -54,11 +55,32 @@
 		  			<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 				</div>
 		</fieldset>
-</form>
 <br><br><br>
 
 {% endblock %}
 
 {% block script %}
-
+$('#email_check').click(function(){
+	let email = $('input[name=email]').val();
+	if(email != '') {
+		$.ajax({
+			type: 'POST',
+			url: '/user/check_email',
+			data: JSON.stringify(email),
+			contentType: "application/json",
+			success: function(data){
+				email = $('input[name=email]').val();
+				if(!data.result){
+					alert(email+' 은 사용가능한 이메일입니다.');
+				}else{
+					alert('이미 존재하는 이메일입니다. 다른 이메일을 사용하세요.');
+				}
+			},
+			error: function(request, status, error){
+				alert('ajax 통신 실패')
+				alert(error);
+			}
+		})
+	}
+});
 {% endblock %}
