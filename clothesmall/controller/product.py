@@ -35,9 +35,9 @@ def read_product_all():
     products = __get_product_all()
     return render_template('product.html', data = products)
 
-def __create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted):   
+def __create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted, img_address, product_information):   
     try:
-        product = Product(name, cost_price, selling_price, admin_id, product_category, is_deleted)
+        product = Product(name, cost_price, selling_price, admin_id, product_category, is_deleted, img_address, product_information)
         g.db.add(product)
         g.db.commit()
         flash('상품 등록이 완료되었습니다.')
@@ -48,7 +48,6 @@ def __create_product(name, cost_price, selling_price, admin_id, product_category
         g.db.rollback()
         flash('상품 등록이 실패했습니다.')
         raise e
-
 
 @bp.route('/product/register')
 def register_product_form():
@@ -67,6 +66,8 @@ def register_product():
         admin_id = 1
         product_category = request.form['category']
         is_deleted = 0
+        img_address = 'basic.jpg'
+        product_information = "상품 상세 정보"
 
         if not name:
             error = '상품명이 없습니다.'
@@ -77,7 +78,7 @@ def register_product():
         elif not product_category:
             error = '카테고리가 없습니다.'
         else:
-            __create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted)
+            __create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted, img_address, product_information)
         
     except Exception as e:
         error = "DB error occurs : " + str(e)

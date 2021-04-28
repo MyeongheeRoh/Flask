@@ -15,12 +15,14 @@
       <th>상품명</th>
       <th>가격</th>
       <th>카테고리</th>
+      <th>상품정보</th>
     </tr>
     <tr>
       <td>{{ data.id }}</td>
       <td>{{ data.name }}</td>
       <td>{{ data.selling_price }}</td>
       <td>{{ data.product_category }}</td>
+      <td>{{ data.product_information }}</td>
     </tr>
   </table>
   <input type="hidden" id="product_id" value="{{data.id}}" name="product_id">

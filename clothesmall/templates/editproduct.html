@@ -55,16 +55,6 @@
 {% block script %}
   console.log('1');
 
-  let save = document.getElementById("save");
-  if(save != null){
-    save.addEventListener("click", saveBtn);
-  }
-  
-  let regist = document.getElementById("regist");
-  if(regist != null){
-    regist.addEventListener("click", registBtn);
-  }
-
   function saveBtn(save){
     let form = document.getElementById("productform");
     form.setAttribute("action","/product/edit");
@@ -84,6 +74,8 @@
       let cost_price = document.getElementById("cost_price").value;
       let selling_price = document.getElementById("selling_price").value;
       let category = document.getElementById("category").value;
+      let save = document.getElementById("save");
+      let regist = document.getElementById("regist");
 
       console.log(pname);
       console.log(cost_price);
@@ -101,6 +93,10 @@
       }
       else if(category==""){
         alert('카테고리를 입력하세요');
+      }else if(save!=null){
+        save.addEventListener("click", saveBtn);
+      }else if(regist!=null){
+        regist.addEventListener("click", registBtn);
       }
   }
 {% endblock %}

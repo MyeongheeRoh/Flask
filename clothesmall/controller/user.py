@@ -3,6 +3,8 @@ from flask import render_template, request, session, Flask, g, redirect, flash, 
 from database import DBManager
 from model.user import User
 from flask import Blueprint
+from wtforms import Form, TextField, PasswordField, HiddenField, validators
+from werkzeug.security import generate_password_hash
 
 
 bp = Blueprint('user', __name__, url_prefix='/')
@@ -15,9 +17,11 @@ def get_db():
     DBManager.init_db()
     print('get_db',g.db)
 
-@bp.route('/user/register')
-def user():
-    return render_template('register.html')
+'''사용자 등록 개발'''
+@bp.route('/user/regist')
+def user_registForm():
+    form = RegisterForm(request.form)
+    return render_template('register.html', form=form)
 
 def __get_user(email):
     try:
@@ -39,3 +43,33 @@ def check_email():
         return jsonify(result = False)
     else:
         return jsonify(result = True)
+
+class RegisterForm(Form):
+    """사용자 등록 화면에서 사용자명, 이메일, 비밀번호, 비밀번호 확인값을 검증함"""
+    
+    username = TextField('Username', 
+                         [validators.Required('사용자명을 입력하세요.'),
+                          validators.Length(
+                            min=4, 
+                            max=50, 
+                            message='4자리 이상 50자리 이하로 입력하세요.')])
+    
+    email = TextField('Email', 
+                      [validators.Required('이메일을 입력하세요.'),
+                       validators.Email(message='형식에 맞지 않는 이메일입니다.')])
+    
+    password = \
+        PasswordField('New Password', 
+                      [validators.Required('비밀번호를 입력하세요.'),
+                       validators.Length(
+                        min=4, 
+                        max=50,
+                        message='4자리 이상 50자리 이하로 입력하세요.'),
+                       validators.EqualTo('password_confirm', 
+                                          message='비밀번호가 일치하지 않습니다.')])
+        
+    password_confirm  = PasswordField('Confirm Password')
+    
+    email_check = \
+        HiddenField('Email Check', 
+                    [validators.Required('이메일 중복을 확인하세요.')])
