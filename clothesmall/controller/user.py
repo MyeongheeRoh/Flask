@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, session, Flask, g, redirect, flash, jsonify
+from flask import render_template, request, session, Flask, g, redirect, flash, jsonify, url_for
 from database import DBManager
 from model.user import User
 from flask import Blueprint
@@ -23,11 +23,48 @@ def user_registForm():
     form = RegisterForm(request.form)
     return render_template('register.html', form=form)
 
+@bp.route('/user/regist', methods=['POST'])
+def register_user():
+    print('-- retister_user 함수 들어왔니?')
+
+    form = RegisterForm(request.form)
+
+    print('-- form-validate() ', form.validate())
+
+    if form.validate():
+
+        password = form.password.data
+        name = form.username.data
+        phone_number = form.phone_number.data
+        status = ''
+        email = form.email.data
+        role = 'USER'
+
+        print('-- 회원정보 : ' + password + ' ' + name + ' ' + email)
+
+        try:            
+            user = User(generate_password_hash(password), name, phone_number, status, email, role)
+            g.db.add(user)
+            g.db.commit()
+            print('-- regist_user : ', user) 
+            
+        except Exception as e:
+            error = "DB error occurs : " + str(e)
+            print(error)
+            g.db.rollback()
+            raise e
+        
+        else:
+            # 성공적으로 사용자 등록이 되면, 로그인 화면으로 이동.
+            return redirect('/') 
+    else:
+        return render_template('register.html', form=form)
+
 def __get_user(email):
     try:
-        print('!!!!!!!!!!!!!!!!!!', email)
+        print('--email--', email)
         current_user = g.db.query(User).filter(User.email == email).first()
-        print('??????????????????', current_user)
+        print('--email exist ?-- ', current_user)
         return current_user
     except Exception as e:
         print('__get_user_error', str(e))
@@ -47,6 +84,10 @@ def check_email():
 class RegisterForm(Form):
     """사용자 등록 화면에서 사용자명, 이메일, 비밀번호, 비밀번호 확인값을 검증함"""
     
+    email = TextField('Email', 
+                      [validators.Required('이메일을 입력하세요.'),
+                       validators.Email(message='형식에 맞지 않는 이메일입니다.')])
+ 
     username = TextField('Username', 
                          [validators.Required('사용자명을 입력하세요.'),
                           validators.Length(
@@ -54,9 +95,12 @@ class RegisterForm(Form):
                             max=50, 
                             message='4자리 이상 50자리 이하로 입력하세요.')])
     
-    email = TextField('Email', 
-                      [validators.Required('이메일을 입력하세요.'),
-                       validators.Email(message='형식에 맞지 않는 이메일입니다.')])
+    phone_number = TextField('phonenumber', 
+                         [validators.Required('형식에 맞게 전화번호를 입력해주세요. (ex : 01012345678)'),
+                          validators.Length(
+                            min=9, 
+                            max=11, 
+                            message='9자리 이상 11자리 이하로 입력하세요.')])
     
     password = \
         PasswordField('New Password', 
