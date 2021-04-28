@@ -25,7 +25,7 @@ def user_registForm():
 
 @bp.route('/user/regist', methods=['POST'])
 def register_user():
-    print('-- retister_user 함수 들어왔니?')
+    print('-- retister_user start')
 
     form = RegisterForm(request.form)
 
@@ -40,7 +40,7 @@ def register_user():
         email = form.email.data
         role = 'USER'
 
-        print('-- 회원정보 : ' + password + ' ' + name + ' ' + email)
+        print('-- 넘어온 회원 값 : ' + password + ' ' + name + ' ' + email)
 
         try:            
             user = User(generate_password_hash(password), name, phone_number, status, email, role)
@@ -55,8 +55,10 @@ def register_user():
             raise e
         
         else:
+            print('-- 회원 가입 성공 --')
+            data = 'success'
             # 성공적으로 사용자 등록이 되면, 로그인 화면으로 이동.
-            return redirect('/') 
+            return render_template('layout.html', data=data)
     else:
         return render_template('register.html', form=form)
 

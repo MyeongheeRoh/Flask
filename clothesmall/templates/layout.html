@@ -60,7 +60,7 @@
       <li><a href="/product/register">상품등록</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li><a id="loginbtn"> 로그인 </a></li>
+      <li><a id="loginmodal"> 로그인 </a></li>
       <li><a href="/user/regist"> 회원가입 </a></li>
       <li><a href="#"> Cart </a></li>
     </ul>
@@ -70,6 +70,12 @@
 
 <div class="container">    
   <div class="row">
+    {% if error %}
+      <p> error {{error}} </p>
+    {% endif %}
+    {% if next_url %}
+      <p> next_url {{next_url}} </p>
+    {% endif %}
     {% block content %}
     <h1>메인화면</h1>
     {% endblock %}
@@ -84,8 +90,8 @@
   </form>
 </footer>
 
-<!-- 회원가입 모달창 -->
-<form class="form-horizontal" action='#' method="POST">
+<!-- 로그인 모달창 -->
+<form id="loginform" class="form-horizontal" action='#' method="POST">
 	<!-- The Modal -->
 	<div class="modal" id="loginModal">
 	  <div class="modal-dialog">
@@ -114,14 +120,16 @@
 			  <div class="controls">
 				<input class="form-control" type="password" id="password" name="password" placeholder="최소 4글자 이상으로 입력해주세요"><br>
 			  </div>
-				</div>
-			 
+        </div>
+        
+        <!-- hidden url -->
+        <input type="hidden" id="next_url" name="next_url" value="/">
 			  </fieldset>
 		</div>
 	  
 		<!-- Modal footer -->
 		<div class="modal-footer">
-		  <button type="button" class="btn btn-success" id="registbtn" data-dismiss="modal">회원가입</button>
+		  <button type="button" class="btn btn-success" id="loginbtn" data-dismiss="modal">로그인</button>
 		  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 		</div>
 	  
@@ -131,12 +139,32 @@
 </form>
 
 <script type="text/javascript">
-  let login = document.getElementById("loginbtn");
-    if(login != null){
-    login.addEventListener("click", function(){
+
+  {% if data %}
+    $('#loginModal').modal('show');
+  {% endif %}
+
+  // login form 전송
+  let loginbtn = document.getElementById("loginbtn");
+  if(loginbtn != null){
+      loginbtn.addEventListener("click", login)
+  }
+
+  function login(){
+      let form = document.getElementById("loginform");
+      form.setAttribute("action","/user/login");
+      form.submit();
+  }
+
+  // login modal 창 열기
+  let loginmodal = document.getElementById("loginmodal");
+  if(loginmodal != null){
+    loginmodal.addEventListener("click", function(){
       $('#loginModal').modal('show');
     })
 	}
+
+  // 회원가입 이동
   let registbtn = document.getElementById("registbtn");
   if(registbtn != null){
     registbtn.addEventListener("click", function(){
@@ -146,6 +174,8 @@
 
   {% block script %}
   {% endblock %}
+
+  
 </script>
 
 </body>

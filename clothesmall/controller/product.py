@@ -26,8 +26,8 @@ def __get_product_all():
         raise e
 
 @bp.route('/')
-def hello():
-    print("hello print")
+def main():
+    print("main print")
     return render_template('layout.html')
 
 @bp.route('/product/list')
