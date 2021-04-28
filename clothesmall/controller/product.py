@@ -27,8 +27,9 @@ def __get_product_all():
 
 @bp.route('/')
 def main():
+    user_info = session.get('user_info', None)
     print("main print")
-    return render_template('layout.html')
+    return render_template('layout.html', user_info = user_info)
 
 @bp.route('/product/list')
 def read_product_all():

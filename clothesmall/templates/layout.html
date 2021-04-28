@@ -59,11 +59,17 @@
       </li>
       <li><a href="/product/register">상품등록</a></li>
     </ul>
+    {% if user_info %}
+    <ul class="nav navbar-nav navbar-right">
+      <li><a> 로그아웃 </a></li>
+      <li><a href="#"> Cart </a></li>
+    </ul>
+    {% else %}
     <ul class="nav navbar-nav navbar-right">
       <li><a id="loginmodal"> 로그인 </a></li>
       <li><a href="/user/regist"> 회원가입 </a></li>
-      <li><a href="#"> Cart </a></li>
     </ul>
+    {% endif %}
     {% endblock %}
   </div>
 </nav>

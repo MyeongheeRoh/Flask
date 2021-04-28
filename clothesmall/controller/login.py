@@ -1,5 +1,6 @@
 import os
 from flask import render_template, request, session, Flask, g, redirect, flash, url_for
+from functools import wraps
 from database import DBManager
 from model.user import User
 from flask import Blueprint
@@ -52,12 +53,12 @@ def login():
                 # 가령, User 클래스 같은 사용자 정보를 추가하는 객체 생성하고
                 # 사용자 정보를 구성하여 session 객체에 추가
                 print('-- user -- : ', user.__dict__)
-                print('1')
-                json_string = json.dumps(user)
-                print('-- json으로 변환됐나요? -- : ', json_string)
+                # json_string = json.dumps(user)
+                # print('-- json으로 변환됐나요? -- : ', json_string)
 
-                session['user_info'] = json.dumps(user.__dict__, separators=(',', ':'))
-                
+                # session['user_info'] = json.dumps(user.__dict__, separators=(',', ':'))
+                session['user_info'] = user.email
+
                 if next_url != '':
                     return redirect(next_url)
                 else:
@@ -65,7 +66,7 @@ def login():
         else:
             login_error = 'User does not exist!'
             
-    return render_template('layout.html', 
+    return render_template(next_url+'.html', 
                    next_url=next_url, 
                    error=login_error, 
                    form=form)
