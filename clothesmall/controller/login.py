@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, session, Flask, g, redirect, flash, url_for
+from flask import render_template, request, session, Flask, g, redirect, flash, url_for, current_app
 from functools import wraps
 from database import DBManager
 from model.user import User
@@ -59,6 +59,7 @@ def login():
                 # session['user_info'] = json.dumps(user.__dict__, separators=(',', ':'))
                 session['user_info'] = user.email
 
+                print('-- next_url -- : ', next_url)
                 if next_url != '':
                     return redirect(next_url)
                 else:
@@ -66,10 +67,47 @@ def login():
         else:
             login_error = 'User does not exist!'
             
-    return render_template(next_url+'.html', 
+    return render_template('layout.html', 
                    next_url=next_url, 
                    error=login_error, 
                    form=form)
+
+@bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
+
+def login_required(f):
+    """현재 사용자가 로그인 상태인지 확인하는 데코레이터
+    로그인 상태에서 접근 가능한 함수에 적용함
+    """
+    
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        try:
+            session_key = \
+                request.cookies.get(
+                    current_app.config['SESSION_COOKIE_NAME'])
+
+            print(' -- session_key : ', session_key)
+            print(' -- session.contains : ', session.__contains__('user_info'))
+
+            is_login = False
+            if session.__contains__('user_info'):
+                is_login = True
+            
+            if not is_login:
+                loginargs = 'login'
+                print("decorated_func(login) : ", loginargs)
+                return redirect(url_for('product.main', loginargs=loginargs))
+
+            return f(*args, **kwargs)
+
+        except Exception as e:
+            print("Photolog error occurs : %s" %str(e))
+            raise e
+
+    return decorated_function
 
 class LoginForm(Form):
     """로그인 화면에서 이메일과 비밀번호 입력값을 검증함"""

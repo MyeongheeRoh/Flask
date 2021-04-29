@@ -58,7 +58,7 @@ def register_user():
             print('-- 회원 가입 성공 --')
             data = 'success'
             # 성공적으로 사용자 등록이 되면, 로그인 화면으로 이동.
-            return render_template('layout.html', data=data)
+            return render_template('layout.html', isregist=data)
     else:
         return render_template('register.html', form=form)
 

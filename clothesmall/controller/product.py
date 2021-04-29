@@ -3,6 +3,8 @@ from flask import render_template, request, session, Flask, g, redirect, flash
 from database import DBManager
 from model.product import Product
 from flask import Blueprint
+from controller.login import login_required
+
 
 
 bp = Blueprint('product', __name__, url_prefix='/')
@@ -27,9 +29,10 @@ def __get_product_all():
 
 @bp.route('/')
 def main():
-    user_info = session.get('user_info', None)
     print("main print")
-    return render_template('layout.html', user_info = user_info)
+    loginargs = request.args.get('loginargs')
+    print('-- loginargs', loginargs)
+    return render_template('layout.html', loginargs=loginargs)
 
 @bp.route('/product/list')
 def read_product_all():
@@ -51,6 +54,7 @@ def __create_product(name, cost_price, selling_price, admin_id, product_category
         raise e
 
 @bp.route('/product/register')
+@login_required
 def register_product_form():
     '''상품 등록을 위한 폼을 제공하는 함수'''
     #TODO : 유효성체크 함수 만들기
@@ -129,6 +133,7 @@ def __modify_product_(id, name, cost_price, selling_price, product_category):
 
 
 @bp.route('/product/edit', methods=['POST'])
+@login_required
 def modify_product():
     '''상품목록 수정하기'''
     try:
@@ -173,7 +178,9 @@ def __delete_product(id):
         raise e
 
 @bp.route('/product/delete', methods=['POST'])
+@login_required
 def remove_product():
+    '''상품삭제하기'''
     id = request.form.get('product_id')
     print('remove_product:::::::::::', id)
     __delete_product(id)

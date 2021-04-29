@@ -39,7 +39,7 @@
       <option value="2" {% if data.product_category == 2 %} selected {% endif %}>상의</option>
       <option value="3" {% if data.product_category == 3 %} selected {% endif %}>하의</option>
     </select><br>
-    <input class="btn btn-default" type="button" id="save" value="저장" onclick="checkAll()"><br>
+    <input class="btn btn-default" type="button" id="save" value="저장" onclick="checkAll()">
     {% else %}
     <label for="category">카테고리: </label><br>
     <select class="form-control" name="category" id="category">
@@ -47,8 +47,9 @@
       <option value="2">상의</option>
       <option value="3">하의</option>
     </select><br>
-    <input class="btn btn-default" type="button" id="regist" value="등록" onclick="checkAll()"><br>
+    <input class="btn btn-default" type="button" id="regist" value="등록" onclick="checkAll()">  
     {% endif %}
+    <input class="btn btn-danger" type="button" id="cancel" value="취소"">
 </form>
 {% endblock %}
 
