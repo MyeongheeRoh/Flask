@@ -14,15 +14,20 @@
 
 {% block content %}
 {% from "_formhelpers.html" import render_field %}
+
 <form id="userform" class="form-horizontal" action='#' method="POST">
 	<fieldset>
 		<div class="control-group">
 			<!-- E-mail -->
 			<label class="control-label" for="email">E-mail</label>
 			<div class="controls">
-				{{ render_field(form.email, class="form-control", placeholder="형식에 맞게 이메일을 입력해주세요.") }}
-				<button name="email_check" id="email_check" class="btn btn-primary">확인</button>
-				{{ render_field(form.email_check) }}
+				{% if user %}
+    			     {{ render_field(form.email, class="form-control", placeholder="문자와 숫자로 공백없이 입력해주세요.", readOnly="True")  }}
+				{% else %}
+					{{ render_field(form.email, class="form-control", placeholder="형식에 맞게 이메일을 입력해주세요.") }}
+					<button name="email_check" id="email_check" class="btn btn-primary">확인</button>
+					{{ render_field(form.email_check) }}
+				{% endif %}
 			</div>
 		</div>
 
@@ -30,9 +35,7 @@
 			<!-- Username -->
 			<label class="control-label" for="username">닉네임</label>
 			<div class="controls">
-				<div class="input-append">
-					{{ render_field(form.username, class="form-control", placeholder="문자와 숫자로 공백없이 입력해주세요.") }}
-				</div>
+					{{ render_field(form.name, class="form-control", placeholder="문자와 숫자로 공백없이 입력해주세요.") }}
 			</div>
 		</div>
 
@@ -40,9 +43,7 @@
 			<!-- PhoneNumber -->
 			<label class="control-label" for="phone_number">전화번호</label>
 			<div class="controls">
-				<div class="input-append">
 					{{ render_field(form.phone_number, class="form-control", placeholder="형식에 맞게 전화번호를 입력해주세요. (exam : 01012345678) ") }}
-				</div>
 			</div>
 		</div>
 
@@ -63,8 +64,12 @@
 		</div>
 
 		<div class="control-group">
-			<button type="button" class="btn btn-success" id="regist" data-dismiss="modal">회원가입</button>
-			<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+			{% if user %}
+			<button type="button" class="btn btn-success" id="saveuser" data-dismiss="modal">회원 정보 수정</button>
+			{% else %} 
+			<button type="button" class="btn btn-success" id="regist" data-dismiss="modal">가입하기</button>
+			{% endif %}
+			<button type="button" class="btn btn-danger" id="cancel" data-dismiss="modal">취소</button>
 		</div>
 	</fieldset>
 </form>
@@ -73,6 +78,14 @@
 {% endblock %}
 
 {% block script %}
+
+let cancel = document.getElementById("cancel");
+if(cancel != null){
+	cancel.addEventListener("click", function(){
+	location.href='/'
+	})
+}
+
 let regist = document.getElementById("regist");
 if(regist!=null){
 	regist.addEventListener("click", registUser);
@@ -80,6 +93,16 @@ if(regist!=null){
 function registUser(){
     let form = document.getElementById("userform");
     form.setAttribute("action","/user/regist");
+    form.submit();
+}
+
+let saveuser = document.getElementById("saveuser");
+if(saveuser!=null){
+	saveuser.addEventListener("click", saveUser);
+}
+function saveUser(){
+    let form = document.getElementById("userform");
+    form.setAttribute("action","/user/{{form.email.data}}");
     form.submit();
 }
 

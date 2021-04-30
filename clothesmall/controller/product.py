@@ -29,10 +29,10 @@ def __get_product_all():
 
 @bp.route('/')
 def main():
-    print("main print")
-    loginargs = request.args.get('loginargs')
-    print('-- loginargs', loginargs)
-    return render_template('layout.html', loginargs=loginargs)
+    print("-- main print")
+    loginargs = request.args.get('islogin')
+    print('-- islogin', loginargs)
+    return render_template('layout.html', islogin=loginargs)
 
 @bp.route('/product/list')
 def read_product_all():
@@ -58,6 +58,7 @@ def __create_product(name, cost_price, selling_price, admin_id, product_category
 def register_product_form():
     '''상품 등록을 위한 폼을 제공하는 함수'''
     #TODO : 유효성체크 함수 만들기
+    print('::::: visited /product/register | register_product_form()')
     return render_template('editproduct.html')
 
 @bp.route('/product/register', methods=['POST'])
@@ -168,13 +169,13 @@ def __delete_product(id):
         print('delete::::::::::::', product)
         product.is_deleted = 1
         g.db.commit()
-        print('상품 삭제가 성공했습니다.')
+        print('상품 삭제를 성공했습니다.')
      
     except Exception as e:
         error = "DB error occurs : " + str(e)
         print(error)
         g.db.rollback()
-        print('상품 삭제가 실패했습니다.')
+        print('상품 삭제하는데 실패했습니다.')
         raise e
 
 @bp.route('/product/delete', methods=['POST'])

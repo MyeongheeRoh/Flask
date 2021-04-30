@@ -60,6 +60,7 @@ def login():
                 session['user_info'] = user.email
 
                 print('-- next_url -- : ', next_url)
+
                 if next_url != '':
                     return redirect(next_url)
                 else:
@@ -81,10 +82,12 @@ def login_required(f):
     """현재 사용자가 로그인 상태인지 확인하는 데코레이터
     로그인 상태에서 접근 가능한 함수에 적용함
     """
-    
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
+
         try:
+            print(':::::: visited login_required')
             session_key = \
                 request.cookies.get(
                     current_app.config['SESSION_COOKIE_NAME'])
@@ -98,8 +101,9 @@ def login_required(f):
             
             if not is_login:
                 loginargs = 'login'
-                print("decorated_func(login) : ", loginargs)
-                return redirect(url_for('product.main', loginargs=loginargs))
+                next_url = request.form.get('next_url')
+                print('next_url' , next_url)
+                return redirect(url_for('product.main', islogin=loginargs))
 
             return f(*args, **kwargs)
 

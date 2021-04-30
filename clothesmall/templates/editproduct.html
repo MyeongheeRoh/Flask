@@ -49,12 +49,23 @@
     </select><br>
     <input class="btn btn-default" type="button" id="regist" value="등록" onclick="checkAll()">  
     {% endif %}
-    <input class="btn btn-danger" type="button" id="cancel" value="취소"">
+    <input class="btn btn-danger" type="button" id="cancel" value="취소">
 </form>
+
+{% block next_url %}
+<input type="hidden" id="next_url" name="next_url" value="/product/register">
+{% endblock %}
 {% endblock %}
 
 {% block script %}
   console.log('1');
+
+  let cancel = document.getElementById("cancel");
+  if(cancel != null){
+    cancel.addEventListener("click", function(){
+      location.href='/'
+    })
+  }
 
   function saveBtn(save){
     let form = document.getElementById("productform");

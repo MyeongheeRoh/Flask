@@ -59,10 +59,10 @@
       </li>
       <li><a id="registerproduct" href="/product/register">상품등록</a></li>
     </ul>
-    {% if session.__contains__('user_info') %}
+    {% if session['user_info'] %}
     <ul class="nav navbar-nav navbar-right">
       <li><a href="/logout"> 로그아웃 </a></li>
-      <li><a href="#"> Cart </a></li>
+      <li><a href="/user/{{session['user_info']}}"> 회원정보 </a></li>
     </ul>
     {% else %}
     <ul class="nav navbar-nav navbar-right">
@@ -73,18 +73,18 @@
     {% endblock %}
   </div>
 </nav>
-
 <div class="container">    
   <div class="row">
+    {% block content %}
+    <h2>메인화면</h2>
+    <hr>
+    {% endblock %}
     {% if error %}
-      <p> error {{error}} </p>
+      <h2 style="color:red"> error : {{error}} </h2>
     {% endif %}
     {% if next_url %}
-      <p> next_url {{next_url}} </p>
+      <h2> next_url : {{next_url}} </h2>
     {% endif %}
-    {% block content %}
-    <h1>메인화면</h1>
-    {% endblock %}
   </div>
 </div><br>
 
@@ -130,7 +130,11 @@
         
         <!-- hidden url -->
         {% block next_url %}
+        {% if next_url %}
+        <input type="hidden" id="next_url" name="next_url" value="{{next_url}}">
+        {% else %}
         <input type="hidden" id="next_url" name="next_url" value="/">
+        {% endif %}
         {% endblock %}
 			  </fieldset>
 		</div>
@@ -150,10 +154,9 @@
 
   console.log('next_url ? ' + document.getElementById("next_url").value);
 
-  {% if loginargs %}
-    if({{loginargs}} == login){
+  {% if islogin or isregist %}
+    if('{{islogin}}' == 'login' || '{{isregist}}' == 'success')
       $('#loginModal').modal('show');
-    }
   {% endif %}
 
   let registerproduct = document.getElementById("registerproduct");
