@@ -75,6 +75,7 @@ def login():
 
 @bp.route('/logout')
 def logout():
+    print('사용자 로그아웃')
     session.clear()
     return redirect('/')
 

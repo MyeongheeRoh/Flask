@@ -17,16 +17,27 @@ def get_db():
     DBManager.init_db()
     print('get_db',g.db)
 
-def __get_user(email):
-    try:
-        current_user = g.db.query(User).filter(User.email == email).first()
+'''사용자 삭제 개발'''
+@bp.route('/user/unregist')
+def unregist():
+    email = session['user_info']
+    print('-- 삭제 요청 이메일 : ', email)
 
-        print(current_user.__dict__)
-        return current_user 
-     
+    try:
+        current_user = __get_user(email)
+        current_user.is_deleted = 1
+        g.db.commit()
+        print('사용자 삭제 처리')
+    
     except Exception as e:
-        print(str(e))
+        print('파일 삭제에 실패했습니다.' + str(e))
+        g.db.rollback()
         raise e
+
+    else:
+        # 성공적으로 사용자 탈퇴가 되면, 로그아웃
+        return redirect(url_for('login.logout'))
+
 
 '''사용자 수정 개발'''
 @bp.route('/user/<email>')
@@ -66,6 +77,17 @@ def update_user(email):
         return render_template('regist.html', 
                                user=current_user, 
                                form=form)
+
+def __get_user(email):
+    try:
+        current_user = g.db.query(User).filter(User.email == email).first()
+
+        print(current_user.__dict__)
+        return current_user 
+     
+    except Exception as e:
+        print(str(e))
+        raise e
 
 '''사용자 등록 개발'''
 @bp.route('/user/regist')

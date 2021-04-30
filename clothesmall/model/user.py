@@ -12,18 +12,19 @@ class User(Base):
     name = Column(String(45), unique = False)
     phone_number = Column(String(20), unique = False)
     status = Column(String(10), unique = False)
-    email = Column(String(45), unique = False)
+    email = Column(String(45), unique = True)
     role = Column(String(10), unique = False)
+    is_deleted = Column(Integer, unique = False)
 
-    def __init__(self, id, password, name, phone_number, status, email, role):
-        self.id = id
+    def __init__(self, password, name, phone_number, status, email, role, is_deleted):
         self.password = password
         self.name = name
         self.phone_number = phone_number
         self.status = status
         self.email = email
         self.role = role
+        self.is_deleted = is_deleted
 
     def __repr__(self):
-        return '<Product %r %r %r %r %r %r %r>' % (self.id, self.password, self.name, self.phone_number, self.status, self.email, self.role)
+        return '<Product %r %r %r %r %r %r %r %r>' % (self.id, self.password, self.name, self.phone_number, self.status, self.email, self.role, self.is_deleted)
 

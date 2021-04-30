@@ -65,11 +65,12 @@
 
 		<div class="control-group">
 			{% if user %}
-			<button type="button" class="btn btn-success" id="saveuser" data-dismiss="modal">회원 정보 수정</button>
+			<button type="button" class="btn btn-success" id="saveuser" data-dismiss="modal">수정</button>
+			<a href="javascript:unregist();" class="btn btn-danger">탈퇴</a>
 			{% else %} 
 			<button type="button" class="btn btn-success" id="regist" data-dismiss="modal">가입하기</button>
 			{% endif %}
-			<button type="button" class="btn btn-danger" id="cancel" data-dismiss="modal">취소</button>
+			<button type="button" class="btn btn-default" id="cancel" data-dismiss="modal">취소</button>
 		</div>
 	</fieldset>
 </form>
@@ -78,6 +79,13 @@
 {% endblock %}
 
 {% block script %}
+
+function unregist(){
+	let unregist = confirm("탈퇴하시겠습니까?");
+	if(unregist == true){
+		$(location).attr('href', "{{url_for('user.unregist')}}");
+	}
+}
 
 let cancel = document.getElementById("cancel");
 if(cancel != null){
