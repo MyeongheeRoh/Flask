@@ -50,6 +50,21 @@ def read_product_all():
     products = __get_product_all()
     return render_template('product.html', data = products)
 
+def __get_products_category(id):
+    '''선택된 카테고리 상품 가져오기'''
+    try:
+        products = g.db.query(Product).filter(Product.product_category == id).all()
+        return products
+     
+    except Exception as e:
+        print('error message',e)
+        raise e
+
+@bp.route('/product/list/<id>')
+def read_product_selected(id):
+    products = __get_products_category(id)
+    return render_template('product.html', data = products)
+
 def __create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted, img_address, product_information):   
     try:
         product = Product(name, cost_price, selling_price, admin_id, product_category, is_deleted, img_address, product_information)
