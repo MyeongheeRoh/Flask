@@ -2,9 +2,9 @@ import os
 from flask import render_template, request, session, Flask, g, redirect, flash
 from database import DBManager
 from model.product import Product
+from model.productcategory import ProductCategory
 from flask import Blueprint
 from controller.login import login_required
-
 
 
 bp = Blueprint('product', __name__, url_prefix='/')
@@ -27,12 +27,23 @@ def __get_product_all():
         print('error message',e)
         raise e
 
+def __get_category_all():
+    '''상품목록 가져오기'''
+    try:
+        categories = g.db.query(ProductCategory).order_by(ProductCategory.id)
+        return categories
+     
+    except Exception as e:
+        print('error message',e)
+        raise e
+
 @bp.route('/')
 def main():
     print("-- main print")
     loginargs = request.args.get('islogin')
+    category = __get_category_all()
     print('-- islogin', loginargs)
-    return render_template('layout.html', islogin=loginargs)
+    return render_template('layout.html', islogin = loginargs, categories = category)
 
 @bp.route('/product/list')
 def read_product_all():

@@ -1,7 +1,7 @@
 ## 환경 설정 및 DB
 
 - [ ]  DB 테이블 및 컬럼 생성
-    - ~~product~~, ~~user~~, category, review
+    - ~~product~~, ~~user~~, ~~product_category~~, ~~product_category_detail~~, review
 - [x]  ~~DB Connection~~
 - [x]  ~~DB : sqlalchemy ORM 이용~~
 - [x]  ~~Blueprint 적용~~
@@ -38,6 +38,18 @@
     - [x] ~~ogin_required()~~
     - [ ] next_url 연결
 - [x] ~~로그아웃~~
+
+## 카테고리
+
+- [x] ~~카테고리 DB 테이블 만들기~~
+- [x] ~~카테고리 리스트~~
+- [ ] 카테고리 생성
+- [ ] 카테고리 수정
+- [ ] 카테고리 삭제
+
+## 카테고리 디테일
+
+- [x] ~~카테고리 상세 DB 테이블 만들기~~ 
 
 ## 해야할 것
 

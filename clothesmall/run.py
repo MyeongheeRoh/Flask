@@ -1,6 +1,5 @@
 from create import create_app
 from flask import render_template, request
-from model.product import Product
 from flask_bootstrap import Bootstrap
 
 

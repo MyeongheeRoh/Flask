@@ -52,9 +52,11 @@
     <ul class="nav navbar-nav">
       <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">상품목록<span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="/product/list">아우터</a></li>
-          <li><a href="/product/list">상의</a></li>
-          <li><a href="/product/list">하의</a></li>
+          {% if categories %}
+            {% for category in categories %}
+              <li><a href="/product/list">{{category.name}}</a></li>
+            {% endfor %}
+          {% endif %}
         </ul>
       </li>
       <li><a id="registerproduct" href="/product/register">상품등록</a></li>
@@ -198,8 +200,32 @@
     })
   }
 
-  {% block script %}
-  {% endblock %}
+  $('#email_check').click(function(){
+	let email = $('input[name=email]').val();
+	if(email != '') {
+		$.ajax({
+			type: 'POST',
+			url: '/user/check_email',
+			data: JSON.stringify(email),
+			contentType: "application/json",
+			success: function(data){
+				if(!data.result){
+					alert(email+' 은 사용가능한 이메일입니다.');
+					$('input[name=email_check]').val('Y');
+				}else{
+					alert('이미 존재하는 이메일입니다. 다른 이메일을 사용하세요.');
+				}
+			},
+			error: function(request, status, error){
+			alert('ajax 통신 실패')
+			alert(error);
+			}
+		})
+	}
+});
+
+{% block script %}
+{% endblock %}
 
 </script>
 
