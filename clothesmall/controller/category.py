@@ -5,18 +5,11 @@ from ..model.productcategory import ProductCategory
 from ..clothesmall_blueprint import clothesmall
 
 
-@clothesmall.before_request
-def get_db():
-    '''Connects to the specific database.'''
-    # 데이터베이스 처리
-    DBManager.init('postgresql://mae:mae1234@localhost:5432/postgres', False) #DB매니저 클래스 초기화
-    DBManager.init_db()
-    print('get_db',g.db)
-
 def __get_category_all():
     '''상품 카테고리 가져오기'''
     try:
         categories = g.db.query(ProductCategory).order_by(ProductCategory.id)
+        print(categories)
         return categories
      
     except Exception as e:
@@ -25,6 +18,7 @@ def __get_category_all():
 
 @clothesmall.route('/category/list')
 def read_category_all():
+    '''상품의 카테고리 목록 전체를 보여준다.'''
     print('*'*100)
     print('/category/list')
     print('*'*100)

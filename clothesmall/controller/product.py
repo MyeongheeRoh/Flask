@@ -8,17 +8,20 @@ from ..controller.login import login_required
 from ..clothesmall_blueprint import clothesmall
 
 
-@clothesmall.before_request
-def get_db():
-    '''Connects to the specific database.'''
-    # 데이터베이스 처리
-    
-    DBManager.init('postgresql://mae:mae1234@localhost:5432/postgres', False) #DB매니저 클래스 초기화
-    DBManager.init_db()
-    print('get_db',g.db)
+@clothesmall.route('/')
+def main():
+    '''메인 페이지'''
+    print('*'*100)
+    print("main print")
+
+    loginargs = request.args.get('islogin')
+    category = __get_category_all()
+
+    print('-- islogin', loginargs)
+    return render_template('layout.html', islogin = loginargs, categories = category)
 
 def __get_product_all():
-    '''상품목록 가져오기'''
+    '''상품 전체목록을 가져온다.'''
     try:
         products = g.db.query(Product).filter(Product.is_deleted==0).order_by(Product.id)
         return products 
@@ -28,7 +31,7 @@ def __get_product_all():
         raise e
 
 def __get_category_all():
-    '''상품 카테고리 가져오기'''
+    '''상품 카테고리 목록을 가져온다.'''
     try:
         categories = g.db.query(ProductCategory).order_by(ProductCategory.id)
         return categories
@@ -37,22 +40,16 @@ def __get_category_all():
         print('error message',e)
         raise e
 
-@clothesmall.route('/')
-def main():
-    print("-- main print")
-    loginargs = request.args.get('islogin')
-    category = __get_category_all()
-    print('-- islogin', loginargs)
-    return render_template('layout.html', islogin = loginargs, categories = category)
 
 @clothesmall.route('/product/list')
 def read_product_all():
+    '''상품 전체 목록'''
     products = __get_product_all()
     category = __get_category_all()
     return render_template('product.html', data = products, categories = category)
 
 def __get_products_category(id):
-    '''선택된 카테고리 상품 가져오기'''
+    '''선택된 카테고리 상품목록을 가져온다.'''
     try:
         products = g.db.query(Product).filter(Product.product_category == id).all()
         return products
@@ -63,12 +60,14 @@ def __get_products_category(id):
 
 @clothesmall.route('/product/list/<id>')
 def read_product_selected(id):
+    '''선택된 카테고리 상품 보여주기'''
     products = __get_products_category(id)
     category = __get_category_all()
 
     return render_template('product.html', data = products, categories = category)
 
-def __create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted, img_address, product_information):   
+def __create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted, img_address, product_information): 
+    '''새로운 상품을 등록한다.'''  
     try:
         product = Product(name, cost_price, selling_price, admin_id, product_category, is_deleted, img_address, product_information)
         g.db.add(product)
@@ -85,7 +84,7 @@ def __create_product(name, cost_price, selling_price, admin_id, product_category
 @clothesmall.route('/product/register')
 @login_required
 def register_product_form():
-    '''상품 등록을 위한 폼을 제공하는 함수'''
+    '''상품 등록 폼'''
     category = __get_category_all()
 
     #TODO : 유효성체크 함수 만들기
@@ -94,7 +93,7 @@ def register_product_form():
 
 @clothesmall.route('/product/register', methods=['POST'])
 def register_product():
-    '''사용자 등록을 위한 함수'''
+    '''사용자 등록'''
 
     try:
         name = request.form['pname']
@@ -127,6 +126,7 @@ def register_product():
     return redirect('/product/list')
     
 def __get_product_one(id):
+    '''일치하는 id의 상품을 가져온다.'''
     try:
         product = g.db.query(Product).filter_by(id=id).one()
         return product 
@@ -156,6 +156,7 @@ def modify_product_form():
     return render_template('editproduct.html', data = product, categories = category)
 
 def __modify_product_(id, name, cost_price, selling_price, product_category):
+    '''선택된 id의 상품을 수정한다. update'''
     try:
         g.db.query(Product).filter_by(id=id).update({'name':name, 'cost_price':cost_price, 'selling_price':selling_price, 'product_category':product_category})
         g.db.commit()
@@ -172,7 +173,7 @@ def __modify_product_(id, name, cost_price, selling_price, product_category):
 @clothesmall.route('/product/edit', methods=['POST'])
 @login_required
 def modify_product():
-    '''상품목록 수정하기'''
+    '''상품 수정'''
     try:
         id = request.form['product_id']
         name = request.form['pname']
@@ -200,6 +201,7 @@ def modify_product():
     return redirect('/product/list')
 
 def __delete_product(id):
+    '''일치하는 id의 상품의 is_deleted 상태를 1로 변경한다.'''
     try:
         product = g.db.query(Product).filter_by(id=id).first()
         print('delete::::::::::::', product)
@@ -217,7 +219,7 @@ def __delete_product(id):
 @clothesmall.route('/product/delete', methods=['POST'])
 @login_required
 def remove_product():
-    '''상품삭제하기'''
+    '''상품 삭제'''
     id = request.form.get('product_id')
     print('remove_product:::::::::::', id)
     __delete_product(id)

@@ -1,5 +1,0 @@
-Flask==1.1.2
-psycopg2==2.8.6
-SQLAlchemy==1.4.10
-WTForms==2.3.3
-email-validator==1.1.2

@@ -8,17 +8,9 @@ from ..model.user import User
 from ..clothesmall_blueprint import clothesmall
 
 
-@clothesmall.before_request
-def get_db():
-    '''Connects to the specific database.'''
-    # 데이터베이스 처리
-    DBManager.init('postgresql://mae:mae1234@localhost:5432/postgres', False) #DB매니저 클래스 초기화
-    DBManager.init_db()
-    print('get_db',g.db)
-
-'''사용자 삭제 개발'''
 @clothesmall.route('/user/unregist')
 def unregist():
+    '''사용자 삭제'''
     print('*'*100)
     print(session['user_info'].email)
     print('*'*100)
@@ -26,13 +18,14 @@ def unregist():
     print('-- 삭제 요청 이메일 : ', email)
 
     try:
+        #사용자의 is_deleted 상태를 1로 바꾸어 삭제로 변경
         current_user = __get_user(email)
         current_user.is_deleted = 1
         g.db.commit()
         print('사용자 삭제 처리')
     
     except Exception as e:
-        print('파일 삭제에 실패했습니다.' + str(e))
+        print('사용자 삭제에 실패했습니다.' + str(e))
         g.db.rollback()
         raise e
 
@@ -41,10 +34,9 @@ def unregist():
         return redirect(url_for('login.logout'))
 
 
-'''사용자 수정 개발'''
 @clothesmall.route('/user/<email>')
 def update_user_form(email):
-    '''사용자 수정 폼 '''
+    '''사용자 수정 폼으로 이동 '''
     print('-- 사용자 수정 폼 --', email)
     current_user = __get_user(email)
     form = UpdateForm(request.form, current_user)
@@ -55,6 +47,7 @@ def update_user_form(email):
 
 @clothesmall.route('/user/<email>', methods=['POST'])
 def update_user(email):
+    '''사용자 수정'''
     current_user = __get_user(email)
     form = UpdateForm(request.form)
 
@@ -77,11 +70,12 @@ def update_user(email):
             # 성공적으로 사용자 등록이 되면, 로그인 화면으로 이동.
             return render_template('layout.html', isregist=data)
     else:
-        return render_template('regist.html', 
+        return render_template('register.html', 
                                user=current_user, 
                                form=form)
 
 def __get_user(email):
+    '''email이 일치하는 사용자 한명의 객체를 가져온다.'''
     try:
         current_user = g.db.query(User).filter(User.email == email).first()
 
@@ -92,16 +86,16 @@ def __get_user(email):
         print(str(e))
         raise e
 
-'''사용자 등록 개발'''
 @clothesmall.route('/user/regist')
 def user_registForm():
+    '''사용자 등록 폼'''
     form = RegisterForm(request.form)
     return render_template('register.html', form=form)
 
 @clothesmall.route('/user/regist', methods=['POST'])
 def register_user():
+    '''사용자 등록'''
     print('-- retister_user start')
-
     form = RegisterForm(request.form)
 
     print('-- form-validate() ', form.validate())
@@ -138,19 +132,10 @@ def register_user():
     else:
         return render_template('register.html', form=form)
 
-def __get_user(email):
-    try:
-        print('-- email--', email)
-        current_user = g.db.query(User).filter(User.email == email).first()
-        print('-- email exist ?-- ', current_user)
-        return current_user
-    except Exception as e:
-        print('__get_user_error', str(e))
-        raise e
-
 @clothesmall.route('/user/check_email', methods=['POST'])
 def check_email():
-    print('--이메일 중복 체크--')
+    '''이메일 중복 체크'''
+    
     email = request.json['email']
     print('이메일', email)
     #DB에서 email 중복확인

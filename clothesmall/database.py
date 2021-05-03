@@ -26,5 +26,6 @@ class DBManager:
     def init_db(): #모델을 연결된 데이터베이스에 생성하는 함수
         Base.metadata.create_all(bind=DBManager.__engine) #데이터베이스 테이블 생성
         print('init_db')
+        print('*'*100)
 
 # dao = None        

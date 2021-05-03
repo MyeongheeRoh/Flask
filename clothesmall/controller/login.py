@@ -9,19 +9,12 @@ from ..database import DBManager
 from ..model.user import User, UserSchema
 from ..clothesmall_blueprint import clothesmall
 
-_user_schema = UserSchema()
 
-@clothesmall.before_request
-def get_db():
-    '''Connects to the specific database.'''
-    # 데이터베이스 처리
-    DBManager.init('postgresql://mae:mae1234@localhost:5432/postgres', False) #DB매니저 클래스 초기화
-    DBManager.init_db()
-    print('get_db',g.db)
+_user_schema = UserSchema()
 
 @clothesmall.route('/user/login', methods=['POST'])
 def login():
-
+    '''로그인'''
     form = LoginForm(request.form)
     next_url = form.next_url.data
     login_error = None
@@ -55,18 +48,7 @@ def login():
                 # 가령, User 클래스 같은 사용자 정보를 추가하는 객체 생성하고
                 # 사용자 정보를 구성하여 session 객체에 추가
 
-                # print('-- user -- : ', user.__dict__)
-                # user_dict = user.__dict__.copy()
-                # user_dict.pop('_sa_instance_state', None)
-
-                # json_string = json.dumps(user_dict)
-                # print('-- json으로 변환됐나요? -- : ', json_string)
-
-                # # session['user_info'] = json.dumps(user.__dict__, separators=(',', ':'))
-                # session['user_info'] = json.dumps(user_dict)
                 session['user_info'] = _user_schema.dump(user)
-                # session['user_info'] = user.email
-
                 print('-- next_url -- : ', next_url)
 
                 if next_url != '':
@@ -83,12 +65,14 @@ def login():
 
 @clothesmall.route('/logout')
 def logout():
+    '''로그아웃'''
     print('사용자 로그아웃')
-    session.clear()
+    session.clear() #세션 클리어
     return redirect('/')
 
 def login_required(f):
-    """현재 사용자가 로그인 상태인지 확인하는 데코레이터
+    """
+    현재 사용자가 로그인 상태인지 확인하는 데코레이터
     로그인 상태에서 접근 가능한 함수에 적용함
     """
 
