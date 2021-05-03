@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}Product{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block nav %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<form id="categoryform" name="categoryform" action="/category/list" method="post">
+  <label for="category_name">카테고리 이름: </label><br>
+    <input class="form-control" type="text" id="cname" name="cname"><br>
+    <input class="btn btn-default" type="button" id="regist" value="등록">  
+    <input class="btn btn-danger" type="button" id="cancel" value="취소">
+</form>
+
+{% block next_url %}
+<input type="hidden" id="next_url" name="next_url" value="/product/list">
+{% endblock %}
+{% endblock %}
+
+{% block script %}
+  console.log('1');
+{% endblock %}

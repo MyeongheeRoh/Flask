@@ -7,7 +7,8 @@
 - [x]  ~~Blueprint 적용~~
 - [x]  ~~Bootstrap 적용~~
 - [x]  ~~Wtforms 적용~~
-
+- [x]  ~~ORM serialization marshmallow 적용~~
+ 
 ## 상품
 
 - [ ]  상품 리스트
@@ -54,6 +55,7 @@
 
 ## 해야할 것
 
+- [x] ~~파일 구조 다시 잡기~~
 - [ ] DB 연결 따로 빼기
 - [X] ~~wtfs 추가~~
     - [ ] form 알림 확인

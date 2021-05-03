@@ -1,14 +1,16 @@
 import os
 from flask import render_template, request, session, Flask, g, redirect, flash, url_for, current_app
 from functools import wraps
-from database import DBManager
-from model.user import User
+from ..database import DBManager
+from ..model.user import User, UserSchema
 from flask import Blueprint
 from wtforms import Form, TextField, PasswordField, HiddenField, validators
 from werkzeug.security import check_password_hash
 import json
 
 bp = Blueprint('login', __name__, url_prefix='/')
+
+_user_schema = UserSchema()
 
 @bp.before_request
 def get_db():
@@ -36,6 +38,7 @@ def login():
 
         try:
             user = g.db.query(User).filter(User.email==email).first()
+            
             print('-- ' + email + ' 비밀번호 -- : ' + user.password)
             print('-- 입력된 비밀번호 -- : ' + password)
 
@@ -52,12 +55,18 @@ def login():
                 # 세션에 추가할 정보를 session 객체의 값으로 추가함
                 # 가령, User 클래스 같은 사용자 정보를 추가하는 객체 생성하고
                 # 사용자 정보를 구성하여 session 객체에 추가
-                print('-- user -- : ', user.__dict__)
-                # json_string = json.dumps(user)
+
+                # print('-- user -- : ', user.__dict__)
+                # user_dict = user.__dict__.copy()
+                # user_dict.pop('_sa_instance_state', None)
+
+                # json_string = json.dumps(user_dict)
                 # print('-- json으로 변환됐나요? -- : ', json_string)
 
-                # session['user_info'] = json.dumps(user.__dict__, separators=(',', ':'))
-                session['user_info'] = user.email
+                # # session['user_info'] = json.dumps(user.__dict__, separators=(',', ':'))
+                # session['user_info'] = json.dumps(user_dict)
+                session['user_info'] = _user_schema.dump(user)
+                # session['user_info'] = user.email
 
                 print('-- next_url -- : ', next_url)
 

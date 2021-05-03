@@ -1,7 +1,7 @@
 import os
 from flask import render_template, request, session, Flask, g, redirect, flash, jsonify, url_for
-from database import DBManager
-from model.user import User
+from ..database import DBManager
+from ..model.user import User
 from flask import Blueprint
 from wtforms import Form, TextField, PasswordField, HiddenField, validators
 from werkzeug.security import generate_password_hash
@@ -20,7 +20,10 @@ def get_db():
 '''사용자 삭제 개발'''
 @bp.route('/user/unregist')
 def unregist():
-    email = session['user_info']
+    print('*'*100)
+    print(session['user_info'].email)
+    print('*'*100)
+    email = session['user_info'].email
     print('-- 삭제 요청 이메일 : ', email)
 
     try:
@@ -111,11 +114,12 @@ def register_user():
         status = ''
         email = form.email.data
         role = 'USER'
+        is_deleted = 0
 
         print('-- 넘어온 회원 값 : ' + password + ' ' + name + ' ' + email)
 
         try:            
-            user = User(generate_password_hash(password), name, phone_number, status, email, role)
+            user = User(generate_password_hash(password), name, phone_number, status, email, role, is_deleted)
             g.db.add(user)
             g.db.commit()
             print('-- regist_user : ', user) 
@@ -136,9 +140,9 @@ def register_user():
 
 def __get_user(email):
     try:
-        print('--email--', email)
+        print('-- email--', email)
         current_user = g.db.query(User).filter(User.email == email).first()
-        print('--email exist ?-- ', current_user)
+        print('-- email exist ?-- ', current_user)
         return current_user
     except Exception as e:
         print('__get_user_error', str(e))
@@ -147,7 +151,7 @@ def __get_user(email):
 @bp.route('/user/check_email', methods=['POST'])
 def check_email():
     print('--이메일 중복 체크--')
-    email = request.get_json()
+    email = request.json['email']
     print('이메일', email)
     #DB에서 email 중복확인
     if __get_user(email) == None :

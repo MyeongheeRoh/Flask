@@ -50,8 +50,9 @@
     </div>
     {% block nav %}
     <ul class="nav navbar-nav">
-      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">상품목록<span class="caret"></span></a>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Clothes<span class="caret"></span></a>
         <ul class="dropdown-menu">
+          <li><a href="/product/list">ALL</a></li>
           {% if categories %}
             {% for category in categories %}
               <li><a href="/product/list/{{category.id}}">{{category.name}}</a></li>
@@ -59,12 +60,13 @@
           {% endif %}
         </ul>
       </li>
-      <li><a id="registerproduct" href="/product/register">상품등록</a></li>
+      <li><a id="registerproduct" href="/product/register">상품수정</a></li>
+      <li><a id="editcategory" href="/category/list">카테고리수정</a></li>
     </ul>
     {% if session['user_info'] %}
     <ul class="nav navbar-nav navbar-right">
       <li><a href="/logout"> 로그아웃 </a></li>
-      <li><a href="/user/{{session['user_info']}}"> 회원정보 </a></li>
+      <li><a href="/user/{{session['user_info'].email}}"> 회원정보 </a></li>
     </ul>
     {% else %}
     <ul class="nav navbar-nav navbar-right">

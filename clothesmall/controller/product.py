@@ -1,10 +1,11 @@
 import os
-from flask import render_template, request, session, Flask, g, redirect, flash
-from database import DBManager
-from model.product import Product
-from model.productcategory import ProductCategory
 from flask import Blueprint
-from controller.login import login_required
+from flask import render_template, request, session, Flask, g, redirect, flash
+
+from ..database import DBManager
+from ..model.product import Product
+from ..model.productcategory import ProductCategory
+from ..controller.login import login_required
 
 
 bp = Blueprint('product', __name__, url_prefix='/')
@@ -13,6 +14,7 @@ bp = Blueprint('product', __name__, url_prefix='/')
 def get_db():
     '''Connects to the specific database.'''
     # 데이터베이스 처리
+    
     DBManager.init('postgresql://mae:mae1234@localhost:5432/postgres', False) #DB매니저 클래스 초기화
     DBManager.init_db()
     print('get_db',g.db)
@@ -28,7 +30,7 @@ def __get_product_all():
         raise e
 
 def __get_category_all():
-    '''상품목록 가져오기'''
+    '''상품 카테고리 가져오기'''
     try:
         categories = g.db.query(ProductCategory).order_by(ProductCategory.id)
         return categories
@@ -48,7 +50,8 @@ def main():
 @bp.route('/product/list')
 def read_product_all():
     products = __get_product_all()
-    return render_template('product.html', data = products)
+    category = __get_category_all()
+    return render_template('product.html', data = products, categories = category)
 
 def __get_products_category(id):
     '''선택된 카테고리 상품 가져오기'''
@@ -63,7 +66,9 @@ def __get_products_category(id):
 @bp.route('/product/list/<id>')
 def read_product_selected(id):
     products = __get_products_category(id)
-    return render_template('product.html', data = products)
+    category = __get_category_all()
+
+    return render_template('product.html', data = products, categories = category)
 
 def __create_product(name, cost_price, selling_price, admin_id, product_category, is_deleted, img_address, product_information):   
     try:
@@ -83,9 +88,11 @@ def __create_product(name, cost_price, selling_price, admin_id, product_category
 @login_required
 def register_product_form():
     '''상품 등록을 위한 폼을 제공하는 함수'''
+    category = __get_category_all()
+
     #TODO : 유효성체크 함수 만들기
     print('::::: visited /product/register | register_product_form()')
-    return render_template('editproduct.html')
+    return render_template('editproduct.html', categories = category)
 
 @bp.route('/product/register', methods=['POST'])
 def register_product():
@@ -135,15 +142,20 @@ def read_product_detail(id):
     '''상품 상세 페이지'''
     print('************* 상품 아이디', id)
     product = __get_product_one(id)
-    return render_template('productdetail.html', data = product)
+    category = __get_category_all()
+
+    return render_template('productdetail.html', data = product, categories = category)
 
 @bp.route('/product/editform', methods=['POST'])
+@login_required
 def modify_product_form():
     '''상품 수정을 위한 폼을 제공하는 함수'''
     #TODO : 유효성체크 함수 만들기
     id = request.form.get('product_id')
     product = __get_product_one(id)
-    return render_template('editproduct.html', data = product)
+    category = __get_category_all()
+
+    return render_template('editproduct.html', data = product, categories = category)
 
 def __modify_product_(id, name, cost_price, selling_price, product_category):
     try:
