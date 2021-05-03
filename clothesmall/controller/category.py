@@ -1,12 +1,11 @@
-from flask import Blueprint
 from flask import render_template, g
+
 from ..database import DBManager
 from ..model.productcategory import ProductCategory
+from ..clothesmall_blueprint import clothesmall
 
 
-bp = Blueprint('category', __name__, url_prefix='/')
-
-@bp.before_request
+@clothesmall.before_request
 def get_db():
     '''Connects to the specific database.'''
     # 데이터베이스 처리
@@ -24,7 +23,7 @@ def __get_category_all():
         print('error message',e)
         raise e
 
-@bp.route('/category/list')
+@clothesmall.route('/category/list')
 def read_category_all():
     print('*'*100)
     print('/category/list')

@@ -1,18 +1,17 @@
 import os
 from flask import render_template, request, session, Flask, g, redirect, flash, url_for, current_app
 from functools import wraps
-from ..database import DBManager
-from ..model.user import User, UserSchema
-from flask import Blueprint
 from wtforms import Form, TextField, PasswordField, HiddenField, validators
 from werkzeug.security import check_password_hash
 import json
 
-bp = Blueprint('login', __name__, url_prefix='/')
+from ..database import DBManager
+from ..model.user import User, UserSchema
+from ..clothesmall_blueprint import clothesmall
 
 _user_schema = UserSchema()
 
-@bp.before_request
+@clothesmall.before_request
 def get_db():
     '''Connects to the specific database.'''
     # 데이터베이스 처리
@@ -20,7 +19,7 @@ def get_db():
     DBManager.init_db()
     print('get_db',g.db)
 
-@bp.route('/user/login', methods=['POST'])
+@clothesmall.route('/user/login', methods=['POST'])
 def login():
 
     form = LoginForm(request.form)
@@ -82,7 +81,7 @@ def login():
                    error=login_error, 
                    form=form)
 
-@bp.route('/logout')
+@clothesmall.route('/logout')
 def logout():
     print('사용자 로그아웃')
     session.clear()
@@ -113,7 +112,7 @@ def login_required(f):
                 loginargs = 'login'
                 next_url = request.form.get('next_url')
                 print('next_url' , next_url)
-                return redirect(url_for('product.main', islogin=loginargs))
+                return redirect(url_for('clothesmall.main', islogin=loginargs))
 
             return f(*args, **kwargs)
 

@@ -1,15 +1,14 @@
 import os
 from flask import render_template, request, session, Flask, g, redirect, flash, jsonify, url_for
-from ..database import DBManager
-from ..model.user import User
-from flask import Blueprint
 from wtforms import Form, TextField, PasswordField, HiddenField, validators
 from werkzeug.security import generate_password_hash
 
+from ..database import DBManager
+from ..model.user import User
+from ..clothesmall_blueprint import clothesmall
 
-bp = Blueprint('user', __name__, url_prefix='/')
 
-@bp.before_request
+@clothesmall.before_request
 def get_db():
     '''Connects to the specific database.'''
     # 데이터베이스 처리
@@ -18,7 +17,7 @@ def get_db():
     print('get_db',g.db)
 
 '''사용자 삭제 개발'''
-@bp.route('/user/unregist')
+@clothesmall.route('/user/unregist')
 def unregist():
     print('*'*100)
     print(session['user_info'].email)
@@ -43,9 +42,10 @@ def unregist():
 
 
 '''사용자 수정 개발'''
-@bp.route('/user/<email>')
+@clothesmall.route('/user/<email>')
 def update_user_form(email):
     '''사용자 수정 폼 '''
+    print('-- 사용자 수정 폼 --', email)
     current_user = __get_user(email)
     form = UpdateForm(request.form, current_user)
 
@@ -53,7 +53,7 @@ def update_user_form(email):
                             user=current_user,
                             form=form)
 
-@bp.route('/user/<email>', methods=['POST'])
+@clothesmall.route('/user/<email>', methods=['POST'])
 def update_user(email):
     current_user = __get_user(email)
     form = UpdateForm(request.form)
@@ -93,12 +93,12 @@ def __get_user(email):
         raise e
 
 '''사용자 등록 개발'''
-@bp.route('/user/regist')
+@clothesmall.route('/user/regist')
 def user_registForm():
     form = RegisterForm(request.form)
     return render_template('register.html', form=form)
 
-@bp.route('/user/regist', methods=['POST'])
+@clothesmall.route('/user/regist', methods=['POST'])
 def register_user():
     print('-- retister_user start')
 
@@ -148,7 +148,7 @@ def __get_user(email):
         print('__get_user_error', str(e))
         raise e
 
-@bp.route('/user/check_email', methods=['POST'])
+@clothesmall.route('/user/check_email', methods=['POST'])
 def check_email():
     print('--이메일 중복 체크--')
     email = request.json['email']

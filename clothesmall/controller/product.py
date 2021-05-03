@@ -1,16 +1,14 @@
 import os
-from flask import Blueprint
 from flask import render_template, request, session, Flask, g, redirect, flash
 
 from ..database import DBManager
 from ..model.product import Product
 from ..model.productcategory import ProductCategory
 from ..controller.login import login_required
+from ..clothesmall_blueprint import clothesmall
 
 
-bp = Blueprint('product', __name__, url_prefix='/')
-
-@bp.before_request
+@clothesmall.before_request
 def get_db():
     '''Connects to the specific database.'''
     # 데이터베이스 처리
@@ -39,7 +37,7 @@ def __get_category_all():
         print('error message',e)
         raise e
 
-@bp.route('/')
+@clothesmall.route('/')
 def main():
     print("-- main print")
     loginargs = request.args.get('islogin')
@@ -47,7 +45,7 @@ def main():
     print('-- islogin', loginargs)
     return render_template('layout.html', islogin = loginargs, categories = category)
 
-@bp.route('/product/list')
+@clothesmall.route('/product/list')
 def read_product_all():
     products = __get_product_all()
     category = __get_category_all()
@@ -63,7 +61,7 @@ def __get_products_category(id):
         print('error message',e)
         raise e
 
-@bp.route('/product/list/<id>')
+@clothesmall.route('/product/list/<id>')
 def read_product_selected(id):
     products = __get_products_category(id)
     category = __get_category_all()
@@ -84,7 +82,7 @@ def __create_product(name, cost_price, selling_price, admin_id, product_category
         flash('상품 등록이 실패했습니다.')
         raise e
 
-@bp.route('/product/register')
+@clothesmall.route('/product/register')
 @login_required
 def register_product_form():
     '''상품 등록을 위한 폼을 제공하는 함수'''
@@ -94,7 +92,7 @@ def register_product_form():
     print('::::: visited /product/register | register_product_form()')
     return render_template('editproduct.html', categories = category)
 
-@bp.route('/product/register', methods=['POST'])
+@clothesmall.route('/product/register', methods=['POST'])
 def register_product():
     '''사용자 등록을 위한 함수'''
 
@@ -137,7 +135,7 @@ def __get_product_one(id):
         print(str(e))
         raise e
 
-@bp.route('/product/detail/<id>')
+@clothesmall.route('/product/detail/<id>')
 def read_product_detail(id):
     '''상품 상세 페이지'''
     print('************* 상품 아이디', id)
@@ -146,7 +144,7 @@ def read_product_detail(id):
 
     return render_template('productdetail.html', data = product, categories = category)
 
-@bp.route('/product/editform', methods=['POST'])
+@clothesmall.route('/product/editform', methods=['POST'])
 @login_required
 def modify_product_form():
     '''상품 수정을 위한 폼을 제공하는 함수'''
@@ -171,7 +169,7 @@ def __modify_product_(id, name, cost_price, selling_price, product_category):
         raise e
 
 
-@bp.route('/product/edit', methods=['POST'])
+@clothesmall.route('/product/edit', methods=['POST'])
 @login_required
 def modify_product():
     '''상품목록 수정하기'''
@@ -216,7 +214,7 @@ def __delete_product(id):
         print('상품 삭제하는데 실패했습니다.')
         raise e
 
-@bp.route('/product/delete', methods=['POST'])
+@clothesmall.route('/product/delete', methods=['POST'])
 @login_required
 def remove_product():
     '''상품삭제하기'''

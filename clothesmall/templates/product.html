@@ -20,7 +20,7 @@
                         <tr>
                         <td>
                                 {% if True %}
-                                <a href="{{url_for('product.read_product_detail', id=product.id)}}">
+                                <a href="{{url_for('clothesmall.read_product_detail', id=product.id)}}">
                                         <img class="col-xs-12" src="{{ url_for('static', filename='images/'+product.img_address) }}">
                                 </a>
                                 {% endif %}
@@ -28,7 +28,7 @@
                         </tr>      
                         <tr>
                         <td>
-                                <a href="{{url_for('product.read_product_detail', id=product.id)}}"> {{ product.name }}</a>
+                                <a href="{{url_for('clothesmall.read_product_detail', id=product.id)}}"> {{ product.name }}</a>
                         </td>
                         </tr>
                         <tr>
