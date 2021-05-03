@@ -36,7 +36,7 @@
 - [x]  ~~사용자 수정~~
     - [x] ~~사용자 수정 페이지~~
 - [x] ~~로그인~~
-    - [x] ~~ogin_required()~~
+    - [x] ~~login_required()~~
     - [ ] next_url 연결
 - [x] ~~로그아웃~~
 
@@ -55,8 +55,9 @@
 
 ## 해야할 것
 
+- [x] ~~DB structure dump~~
 - [x] ~~파일 구조 다시 잡기~~
 - [x] ~~DB 연결 따로 빼기~~
-    - [ ] DB config
+    - [x] DB config
 - [X] ~~wtfs 추가~~
     - [ ] form 알림 확인

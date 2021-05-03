@@ -29,7 +29,11 @@ def login():
         print('(%s)next_url is %s' %(request.method, next_url))
 
         try:
+            print('*'*100)
+            print('user')
             user = g.db.query(User).filter(User.email==email).first()
+            print(user)
+            print('*'*100)
             
             print('-- ' + email + ' 비밀번호 -- : ' + user.password)
             print('-- 입력된 비밀번호 -- : ' + password)
