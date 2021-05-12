@@ -8,16 +8,18 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "bootstrap": "^5.0.0",
+    "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11",
+    "sass-loader": "^10.2.0",
+    "vue": "^2.6.12",
     "vue-router": "^3.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "node-sass": "^6.0.0",
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
