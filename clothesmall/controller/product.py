@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, session, Flask, g, redirect, flash
+from flask import render_template, request, session, Flask, g, redirect, flash, json, jsonify
 
 from ..database import DBManager
 from ..model.product import Product
@@ -7,6 +7,11 @@ from ..model.productcategory import ProductCategory
 from ..controller.login import login_required
 from ..clothesmall_blueprint import clothesmall
 
+
+#ping
+@clothesmall.route('/ping', methods=['GET'])
+def ping():
+    return jsonify('pong!')
 
 @clothesmall.route('/')
 def main():

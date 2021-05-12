@@ -5,159 +5,163 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <style>
-    /* Remove the navbar's default rounded borders and increase the bottom margin */ 
-    a{
-      text-decoration: none;
-      color: black;
-    }
-    .navbar {
-      margin-bottom: 50px;
-      border-radius: 0;
-    }
-    
-    /* Remove the jumbotron's default bottom margin */ 
-     .jumbotron {
-      margin-bottom: 0;
-    }
-   
-    /* Add a gray background color and some padding to the footer */
-    footer {
-      background-color: #f2f2f2;
-      padding: 25px;
-    }
-    {% block st %}
-    {% endblock %}
-  </style>
+  /* Remove the navbar's default rounded borders and increase the bottom margin */ 
+  a{
+    text-decoration: none;
+    color: black;
+  }
+  .navbar {
+    margin-bottom: 50px;
+    border-radius: 0;
+  }
+  
+  /* Remove the jumbotron's default bottom margin */ 
+  .jumbotron {
+    margin-bottom: 0;
+  }
+  
+  /* Add a gray background color and some padding to the footer */
+  footer {
+    background-color: #f2f2f2;
+    padding: 25px;
+  }
+  {% block st %}
+  {% endblock %}
+</style>
 </head>
 <body>
-
-{% block jumbo %}
-<div class="jumbotron">
-  <div class="container text-center">
-    <h1>Online Store</h1>      
-    <p>Mission, Vission & Values</p>
-  </div>
-</div>
-{% endblock %}
-
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/">Home</a>
+  
+  {% block jumbo %}
+  <div class="jumbotron">
+    <div class="container text-center">
+      <h1>Online Store</h1>      
+      <p>Mission, Vission & Values</p>
     </div>
-    {% block nav %}
-    <ul class="nav navbar-nav">
-      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Clothes<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="/product/list">ALL</a></li>
-          {% if categories %}
+  </div>
+  {% endblock %}
+  
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Home</a>
+      </div>
+      {% block nav %}
+      <ul class="nav navbar-nav">
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Clothes<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/product/list">ALL</a></li>
+            {% if categories %}
             {% for category in categories %}
-              <li><a href="/product/list/{{category.id}}">{{category.name}}</a></li>
+            <li><a href="/product/list/{{category.id}}">{{category.name}}</a></li>
             {% endfor %}
-          {% endif %}
-        </ul>
-      </li>
-      <li><a id="registerproduct" href="/product/register">상품수정</a></li>
-      <li><a id="editcategory" href="/category/list">카테고리수정</a></li>
-    </ul>
-    {% if session['user_info'] %}
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="/logout"> 로그아웃 </a></li>
-      <li><a href="/user/{{session['user_info'].email}}"> 회원정보 </a></li>
-    </ul>
-    {% else %}
-    <ul class="nav navbar-nav navbar-right">
-      <li><a id="loginmodal"> 로그인 </a></li>
-      <li><a href="/user/regist"> 회원가입 </a></li>
-    </ul>
-    {% endif %}
-    {% endblock %}
-  </div>
-</nav>
-<div class="container">    
-  <div class="row">
-    {% block content %}
-    <h2>메인화면</h2>
-    <hr>
-    {% endblock %}
-    {% if error %}
+            {% endif %}
+          </ul>
+        </li>
+        <li><a id="registerproduct" href="/product/register">상품수정</a></li>
+        <li><a id="editcategory" href="/category/list">카테고리수정</a></li>
+      </ul>
+      {% if session['user_info'] %}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logout"> 로그아웃 </a></li>
+        <li><a href="/user/{{session['user_info'].email}}"> 회원정보 </a></li>
+      </ul>
+      {% else %}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a id="loginmodal"> 로그인 </a></li>
+        <li><a href="/user/regist"> 회원가입 </a></li>
+      </ul>
+      {% endif %}
+      {% endblock %}
+    </div>
+  </nav>
+  <div class="container">
+    
+    <div id="app">
+      [[ band.title ]]
+    </div>
+    
+    <div class="row">
+      {% block content %}
+      <h2>메인화면</h2>
+      <hr>
+      {% endblock %}
+      {% if error %}
       <h2 style="color:red"> error : {{error}} </h2>
-    {% endif %}
-    {% if next_url %}
+      {% endif %}
+      {% if next_url %}
       <h2> next_url : {{next_url}} </h2>
-    {% endif %}
-    {% if msg %}
+      {% endif %}
+      {% if msg %}
       <h2>messege : {{msg}} </h2> 
-    {% endif %}
-  </div>
-</div><br>
-
-<footer class="container-fluid text-center">
-  <p>Online Store Copyright</p>  
-  <form class="form-inline">Get deals:
-    <input type="email" class="form-control" size="50" placeholder="Email Address">
-    <button type="button" class="btn btn-danger">Sign Up</button>
-  </form>
-</footer>
-
-<!-- 로그인 모달창 -->
-<form id="loginform" class="form-horizontal" action='#' method="POST">
-	<!-- The Modal -->
-	<div class="modal" id="loginModal">
-	  <div class="modal-dialog">
-		<div class="modal-content">
-	  
-		<!-- Modal Header -->
-		<div class="modal-header">
-		  <h4 class="modal-title">로그인</h4>
-		  <button type="button" class="close" data-dismiss="modal">&times;</button>
-		</div>
-	  
-		<!-- Modal body -->
-		<div class="modal-body">
-		  <fieldset>
-			  <div class="control-group">
-          <!-- E-mail -->
-          <label class="control-label" for="email">E-mail</label>
-          <div class="controls">
-          <input class="form-control" type="text" id="email" name="email" placeholder="형식에 맞게 이메일을 입력해주세요"><br>
+      {% endif %}
+    </div>
+  </div><br>
+  
+  <footer class="container-fluid text-center">
+    <p>Online Store Copyright</p>  
+    <form class="form-inline">Get deals:
+      <input type="email" class="form-control" size="50" placeholder="Email Address">
+      <button type="button" class="btn btn-danger">Sign Up</button>
+    </form>
+  </footer>
+  
+  <!-- 로그인 모달창 -->
+  <form id="loginform" class="form-horizontal" action='#' method="POST">
+    <!-- The Modal -->
+    <div class="modal" id="loginModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">로그인</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
-			  </div>
-			 
-				<div class="control-group">
-			  <!-- Password-->
-			  <label class="control-label" for="password">비밀번호</label>
-			  <div class="controls">
-				<input class="form-control" type="password" id="password" name="password" placeholder="최소 4글자 이상으로 입력해주세요"><br>
-			  </div>
+          
+          <!-- Modal body -->
+          <div class="modal-body">
+            <fieldset>
+              <div class="control-group">
+                <!-- E-mail -->
+                <label class="control-label" for="email">E-mail</label>
+                <div class="controls">
+                  <input class="form-control" type="text" id="email" name="email" placeholder="형식에 맞게 이메일을 입력해주세요"><br>
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <!-- Password-->
+                <label class="control-label" for="password">비밀번호</label>
+                <div class="controls">
+                  <input class="form-control" type="password" id="password" name="password" placeholder="최소 4글자 이상으로 입력해주세요"><br>
+                </div>
+              </div>
+              
+              <!-- hidden url -->
+              {% block next_url %}
+              {% if next_url %}
+              <input type="hidden" id="next_url" name="next_url" value="{{next_url}}">
+              {% else %}
+              <input type="hidden" id="next_url" name="next_url" value="/">
+              {% endif %}
+              {% endblock %}
+            </fieldset>
+          </div>
+          
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="loginbtn" data-dismiss="modal">로그인</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+          
         </div>
-        
-        <!-- hidden url -->
-        {% block next_url %}
-        {% if next_url %}
-        <input type="hidden" id="next_url" name="next_url" value="{{next_url}}">
-        {% else %}
-        <input type="hidden" id="next_url" name="next_url" value="/">
-        {% endif %}
-        {% endblock %}
-			  </fieldset>
-		</div>
-	  
-		<!-- Modal footer -->
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-success" id="loginbtn" data-dismiss="modal">로그인</button>
-		  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-		</div>
-	  
-		</div>
+      </div>
 	  </div>
-	  </div>
-</form>
-
-<script type="text/javascript">
+  </form>
+  
+  <script type="text/javascript">
 
   console.log('next_url ? ' + document.getElementById("next_url").value);
 
@@ -231,5 +235,32 @@
 
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+<script>
+
+  let app = new Vue({
+    el: '#app',
+    delimiters: ['[[', ']]'],
+    data: {
+      band: {}
+    },
+    mounted: function() {
+      this.fetchData();
+    },
+    methods: {
+      fetchData: function(){
+        Vue.http.get('/test').then(response => {
+          this.band = response.body;
+        }, response => {
+          //error callback
+          console.log('an error occurred');
+        });
+      }
+    }
+  })
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>

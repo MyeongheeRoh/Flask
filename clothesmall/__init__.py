@@ -1,5 +1,7 @@
 import os
 from flask import Flask
+from flask_cors import CORS
+
 from .controller import *
 from .database import DBManager
 
@@ -17,6 +19,8 @@ def create_app():
     from .config import ClothesmallConfig
     app.config.from_object(ClothesmallConfig)
     #기본 클래스와 설정 변경하기 위해 적용할 설정파일 설정
+
+    CORS(app, resources={r'/*' : {'origins':'*'}})
 
     from .clothesmall_blueprint import clothesmall
     app.register_blueprint(clothesmall)

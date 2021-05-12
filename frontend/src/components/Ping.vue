@@ -1,8 +1,19 @@
 <template>
-  <div class="container">
-    <button type="button" class="btn btn-primary">{{ msg }}</button>
+  <div>
+    <p>{{ msg }}</p>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'Ping',
+  data() {
+    return {
+      msg: 'Hello!',
+    };
+  },
+};
+</script>
 
 <script>
 import axios from 'axios';
