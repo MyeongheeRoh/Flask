@@ -24,6 +24,8 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
 // Register global components
+// 전역 컴포넌트 등록
+// Vue.component('컴포넌트이름', '옵션')
 Vue.component(BaseLayoutModifier.name, BaseLayoutModifier)
 Vue.component(BaseBlock.name, BaseBlock)
 Vue.component(BaseBackground.name, BaseBackground)

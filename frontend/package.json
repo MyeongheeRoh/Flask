@@ -10,7 +10,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.2",
-    "chart.js": "^3.2.1",
+    "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "sass-loader": "^10.2.0",
     "simplebar-vue": "^1.6.3",

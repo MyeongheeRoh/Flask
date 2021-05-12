@@ -36,9 +36,9 @@
     <!-- END Main Container -->
 
     <!-- Footer -->
-    <base-footer v-if="$store.state.layout.footer" :class="layoutClasses.footer || 'bg-body-light'">
+    <base-footers v-if="$store.state.layout.footer" :class="layoutClasses.footer || 'bg-body-light'">
       <slot name="footer"></slot>
-    </base-footer>
+    </base-footers>
     <!-- END Footer -->
   </div>
 </template>
@@ -61,7 +61,7 @@
 import BaseHeader from '@/layouts/partials/Header'
 import BaseSidebar from '@/layouts/partials/Sidebar'
 import BaseSideOverlay from '@/layouts/partials/SideOverlay'
-import BaseFooter from '@/layouts/partials/Footer'
+import BaseFooters from '@/layouts/partials/Footer'
 
 export default {
   name: 'BaseLayout',
@@ -69,7 +69,7 @@ export default {
     BaseHeader,
     BaseSidebar,
     BaseSideOverlay,
-    BaseFooter
+    BaseFooters
   },
   props: {
     layoutClasses: Object
