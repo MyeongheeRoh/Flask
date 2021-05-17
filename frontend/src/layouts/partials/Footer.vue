@@ -19,11 +19,4 @@
   <!-- END Footer -->
 </template>
 
-<script>
-export default {
-  name: 'BaseFooter',
-  props: {
-    classes: String
-  }
-}
-</script>
+

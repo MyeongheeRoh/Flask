@@ -1,92 +1,47 @@
 <template>
   <div>
-    <!-- Hero -->
-    <div class="bg-body-light">
-      <div class="content content-full">
-        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-2 text-center text-sm-left">
-          <div class="flex-sm-fill">
-            <h1 class="h3 font-w700 mb-2">
-              Main Dashboard
-            </h1>
-            <h2 class="h6 font-w500 text-muted mb-0">
-              Welcome <a class="font-w600" href="javascript:void(0)">Adam</a>, everything looks great.
-            </h2>
-          </div>
-          <div class="mt-3 mt-sm-0 ml-sm-3">
-            <b-button variant="alt-primary" class="mr-1" href="javascript:void(0)" v-click-ripple>
-              <i class="fa fa-plus-square mr-1"></i> New Project
-            </b-button>
-            <b-button variant="alt-primary" href="javascript:void(0)" v-click-ripple>
-              <i class="fa fa-cog"></i>
-            </b-button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- END Hero -->
-
     <!-- Page Content -->
     <div class="content">
       <!-- Stats -->
       <b-row>
         <b-col cols="6" md="3" lg="6" xl="3">
-          <base-block tag="a" rounded link-pop content-class="d-flex py-4" href="javascript:void(0)">
-            <div class="flex-grow-1">
+          <base-block tag="a" rounded link-pop content-full href="javascript:void(0)">
               <div class="font-size-sm font-w600 text-uppercase text-muted">
                 Visitors
               </div>
-              <div class="font-size-h3">
+              <div class="font-size-h2 font-w400 text-dark">
                 120,580
               </div>
-            </div>
-            <div class="d-flex ml-2">
-              <div class="flex-grow-1 px-1 bg-success-light rounded-lg"></div>
-            </div>
           </base-block>
         </b-col>
         <b-col cols="6" md="3" lg="6" xl="3">
-          <base-block tag="a" rounded link-pop content-class="d-flex py-4" href="javascript:void(0)">
-            <div class="flex-grow-1">
+          <base-block tag="a" rounded link-pop content-full href="javascript:void(0)">
               <div class="font-size-sm font-w600 text-uppercase text-muted">
                 Sales
               </div>
-              <div class="font-size-h3">
+              <div class="font-size-h2 font-w400 text-dark">
                 150
               </div>
-            </div>
-            <div class="d-flex ml-2">
-              <div class="flex-grow-1 px-1 bg-danger-light rounded-lg"></div>
-            </div>
           </base-block>
         </b-col>
         <b-col cols="6" md="3" lg="6" xl="3">
-          <base-block tag="a" rounded link-pop content-class="d-flex py-4" href="javascript:void(0)">
-            <div class="flex-grow-1">
+          <base-block tag="a" rounded link-pop content-full href="javascript:void(0)">
               <div class="font-size-sm font-w600 text-uppercase text-muted">
                 Earnings
               </div>
-              <div class="font-size-h3">
+              <div class="font-size-h2 font-w400 text-dark">
                 $3,200
               </div>
-            </div>
-            <div class="d-flex ml-2">
-              <div class="flex-grow-1 px-1 bg-success-light rounded-lg"></div>
-            </div>
           </base-block>
         </b-col>
         <b-col cols="6" md="3" lg="6" xl="3">
-          <base-block tag="a" rounded link-pop content-class="d-flex py-4" href="javascript:void(0)">
-            <div class="flex-grow-1">
+          <base-block tag="a" rounded link-pop content-full href="javascript:void(0)">
               <div class="font-size-sm font-w600 text-uppercase text-muted">
                 Avg Sale
               </div>
-              <div class="font-size-h3">
+              <div class="font-size-h2 font-w400 text-dark">
                 $21
               </div>
-            </div>
-            <div class="d-flex ml-2">
-              <div class="flex-grow-1 px-1 bg-danger-light rounded-lg"></div>
-            </div>
           </base-block>
         </b-col>
       </b-row>
@@ -99,7 +54,7 @@
           <base-block rounded title="Earnings in $" header-bg>
             <template #options>
               <button type="button" class="btn-block-option">
-                <i class="si si-settings"></i>
+                  <i class="si si-settings"></i>
               </button>
             </template>
             <template #content>
@@ -111,20 +66,20 @@
               <div class="block-content">
                 <b-row class="items-push text-center py-3">
                   <b-col cols="6" xl="3">
-                    <i class="fa fa-wallet fa-2x opacity-50"></i>
-                    <p class="font-size-sm font-w500 text-muted mt-3 mb-0">$148,000</p>
+                    <i class="fa fa-wallet fa-2x text-muted"></i>
+                    <div class="text-muted mt-3">$148,000</div>
                   </b-col>
                   <b-col cols="6" xl="3">
-                    <i class="fa fa-angle-double-up fa-2x opacity-50"></i>
-                    <p class="font-size-sm font-w500 text-muted mt-3 mb-0">+9% Earnings</p>
+                    <i class="fa fa-angle-double-up fa-2x text-muted"></i>
+                    <div class="text-muted mt-3">+9% Earnings</div>
                   </b-col>
                   <b-col cols="6" xl="3">
-                    <i class="fa fa-ticket-alt fa-2x opacity-50"></i>
-                    <p class="font-size-sm font-w500 text-muted mt-3 mb-0">+20% Tickets</p>
+                    <i class="fa fa-ticket-alt fa-2x text-muted"></i>
+                    <div class="text-muted mt-3">+20% Tickets</div>
                   </b-col>
                   <b-col cols="6" xl="3">
-                    <i class="fa fa-users fa-2x opacity-50"></i>
-                    <p class="font-size-sm font-w500 text-muted mt-3 mb-0">+46% Clients</p>
+                    <i class="fa fa-users fa-2x text-muted"></i>
+                    <div class="text-muted mt-3">+46% Clients</div>
                   </b-col>
                 </b-row>
               </div>
@@ -137,7 +92,7 @@
           <base-block rounded title="Sales" header-bg>
             <template #options>
               <button type="button" class="btn-block-option">
-                <i class="si si-settings"></i>
+                  <i class="si si-settings"></i>
               </button>
             </template>
             <template #content>
@@ -149,20 +104,20 @@
               <div class="block-content">
                 <b-row class="items-push text-center py-3">
                   <b-col cols="6" xl="3">
-                    <i class="fab fa-wordpress fa-2x opacity-50"></i>
-                    <p class="font-size-sm font-w500 text-muted mt-3 mb-0">+20% Themes</p>
+                    <i class="fab fa-wordpress fa-2x text-muted"></i>
+                    <div class="text-muted mt-3">+20% Themes</div>
                   </b-col>
                   <b-col cols="6" xl="3">
-                    <i class="fa fa-font fa-2x opacity-50"></i>
-                    <p class="font-size-sm font-w500 text-muted mt-3 mb-0">+25% Fonts</p>
+                    <i class="fa fa-font fa-2x text-muted"></i>
+                    <div class="text-muted mt-3">+25% Fonts</div>
                   </b-col>
                   <b-col cols="6" xl="3">
-                    <i class="fa fa-archive fa-2x opacity-50"></i>
-                    <p class="font-size-sm font-w500 text-muted mt-3 mb-0">-10% Icons</p>
+                    <i class="fa fa-archive fa-2x text-muted"></i>
+                    <div class="text-muted mt-3">-10% Icons</div>
                   </b-col>
                   <b-col cols="6" xl="3">
-                    <i class="fa fa-paint-brush fa-2x opacity-50"></i>
-                    <p class="font-size-sm font-w500 text-muted mt-3 mb-0">+8% Graphics</p>
+                    <i class="fa fa-paint-brush fa-2x text-muted"></i>
+                    <div class="text-muted mt-3">+8% Graphics</div>
                   </b-col>
                 </b-row>
               </div>
