@@ -29,7 +29,7 @@
         </div>
       </slot>
     </div>
-    <div v-if="!$slots.content" class="block-content" :class="classContainerContent">
+    <div v-if="!$slots.content" class="block-content ribbons" :class="classContainerContent">
       <div v-if="this.ribbon" class="ribbon-box">
         <slot name="ribbon">
           {{ ribbon }}

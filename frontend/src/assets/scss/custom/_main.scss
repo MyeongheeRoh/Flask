@@ -10,3 +10,17 @@
 // If you have many custom styles, you can create and import additional files
 // For example you can create _component1.scss and include it as follows:
 // @import 'component1';
+
+.ribbons{
+    min-height: 180px;
+}
+
+.flexbox{
+    display: grid;
+    flex-wrap: wrap;
+}
+
+.productImg{
+    width: 200px;
+    height: 200px;
+}

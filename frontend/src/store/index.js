@@ -18,6 +18,9 @@ const helpers = {
   }
 }
 
+//apiURI resource
+const resourceHost = "http://localhost:5000"
+
 // Vuex Store
 export default new Vuex.Store({
   state: {
@@ -74,6 +77,10 @@ export default new Vuex.Store({
     // Get app color theme
     appColorTheme: (state) => {
       return state.settings.colorTheme
+    },
+    // Get resourceHost
+    apiUrl: () => {
+      return resourceHost
     }
   },
   mutations: {

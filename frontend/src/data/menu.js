@@ -20,7 +20,7 @@ export default {
       sub: [
         {
           name: 'All',
-          to: '/backend/elements/ribbons'
+          to: '/product/list'
         },
         {
           name: 'Outer',

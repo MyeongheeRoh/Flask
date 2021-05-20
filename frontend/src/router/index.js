@@ -15,6 +15,7 @@ const Landing = () => import("@/views/Landing.vue")
 const Dashboard = () => import(/* webpackChunkName: "pages-dashboard", webpackPrefetch: true */"@/views/Dashboard.vue")
 
 const ElementsRibbons = () => import("@/views/elements/Ribbons.vue")
+const Product = () => import("@/views/product/Product.vue");
 
 // Router Configuration
 export default new Router({
@@ -38,17 +39,22 @@ export default new Router({
           path: 'elements',
           redirect: '/elements/grid',
           component: {
-            render(c) { return c('router-view') }
+            render(c) { return c('router-view') } 
           },
           children: [
             {
-              path: 'ribbons',
-              name: 'Elements Ribbons',
+              path: 'ribbons', // backend/elements/ribbons 일치하면
+              name: 'Elements Ribbons', // ElementsRibbons는 상위 component router-view에 렌더링됨
               component: ElementsRibbons
             },
           ]
         },
+        {
+          path: '/product/list',
+          name: 'Product',
+          component: Product,
+        },
       ]
-    },
+    }
   ]
 });
